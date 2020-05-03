@@ -48,7 +48,9 @@ organization = "MATTR Ltd"
 
 OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User in an interoperable and REST-like manner.
 
-This specification defines how a client bound assertion can be used with a signed request object to obtain an identity based credential from an OpenID Connect Provider.
+Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or `user assertion`, is said to be `bearer in nature`, meaning it features no authenticatable binding to the Client that received it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentation.
+
+This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain a user assertion which is bound to the Client in an authenticatable manner. This feature then enables the client to onward disclose the obtained assertion to other relying parties whilst authenticating the established binding, therefore proving it is the rightful possessor of the assertion.
 
 
 ### Table of Contents
@@ -83,10 +85,10 @@ All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] d
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
 openid:credential
-: A scope defined by a client in the Authorization request to initiate the Client bound identity assertion request.
+: A scope defined by a Client in the Authorization request to initiate the Client bound identity assertion request.
 
 Credential
-: A long-lived identity assertion made about a subject that has been bound to the client.
+: An assertion made about a End-User that has been bound to the requesting Client in an authenticatable manner.
 
 
 # Scope openid:credential
@@ -108,11 +110,11 @@ scope=openid openid:credential email
 
 Support for the `request` parameter is MANDATORY for client bound identity assertions.
 
-To bind the Credential claims to the subject making the request, the Request Object must be signed by the Client using a subject identifier and a URI referencing the subject keys included in the `iss` value.
+To bind the Credential claims to the Client making the request, the Request Object must be signed by the Client using a subject identifier and a URI referencing the subject keys included in the `iss` value.
 
-Unsigned plaintext Request Objects, containing `none` in the `alg` value of the JOSE header will be rejected by the OP.
+Unsigned plaintext Request Objects, containing `none` in the `alg` value of the JOSE header MUST not be supported.
 
-If the Request Object signing validation fails or is missing, the OP will respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_request_object`.
+If the Request Object signing validation fails or is missing, the OpenID Connect Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_request_object`.
 
 A credentials claim is added to the Request Object containing desired claim values, or a reference to them, to be included in the resulting Credential.
 
@@ -124,17 +126,17 @@ A non-normative example of a payload of a signed Request Object signed using a D
 "aud": "https://issuer.example.com",
 "response_type": "code",
 "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-"redirect_uri": "appwallet://my.wallet/callback",
+"redirect_uri": "https://client.example.com/callback",
 "max_age": 86400,
 "claims": 
 	{ 
-	"id_token": {}, 
-	"credential": { 
-		"givenName": "Jane",
-		"lastName": "Doe",
-		"courseId": "foundationTraining"
-				  }
-		}
+    "id_token": {}, 
+    "credential": { 
+      "givenName": "Jane",
+      "lastName": "Doe",
+      "courseId": "foundationTraining"
+    }
+  }
 }
 ```
   
