@@ -1,4 +1,5 @@
-﻿Client Bound Identity Assertion
+
+Client Bound Identity Assertion
 
 %%%
 title = "Client Bound Identity Assertion"
@@ -93,7 +94,7 @@ Credential
 
 # Scope openid:credential
 
-As part of the Authorization Request, the Client must include the scope `openid:credential` in the second position directly after the scope `openid` to indicate to the OP the Client wants to retrieve a Credential.
+As part of the Authorization Request, the Client MUST include the scope `openid:credential` in the second position directly after the scope `openid` to indicate to the OP the Client wants to retrieve a Credential.
 
 Use of the `openid:credential` scope results in the `request` parameter being mandatory in the Authorization request.
 
@@ -110,7 +111,7 @@ scope=openid openid:credential email
 
 Support for the `request` parameter is MANDATORY for client bound identity assertions.
 
-To bind the Credential claims to the Client making the request, the Request Object must be signed by the Client using a subject identifier and a URI referencing the subject keys included in the `iss` value.
+To bind the Credential claims to the Client making the request, the Request Object MUST be signed by the Client using a subject identifier and a URI referencing the subject keys included in the `iss` value.
 
 Unsigned plaintext Request Objects, containing `none` in the `alg` value of the JOSE header MUST not be supported.
 
@@ -122,7 +123,7 @@ A non-normative example of a payload of a signed Request Object signed using a D
 
 ```
 {
-"iss": "did:key:subject-did#key1",
+"iss": "did:key:subject-did",
 "aud": "https://issuer.example.com",
 "response_type": "code",
 "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
@@ -132,9 +133,10 @@ A non-normative example of a payload of a signed Request Object signed using a D
 	{ 
     "id_token": {}, 
     "credential": { 
-      "givenName": "Jane",
-      "lastName": "Doe",
-      "courseId": "foundationTraining"
+      "given_name": {"essential": true},
+      "last_name": {"essential": true},
+      "https://issuer.example.org/courses/courseDate": {"essential": true},
+      "https://issuer.example.org/courses/courseName": {"essential": true}
     }
   }
 }
@@ -143,7 +145,7 @@ A non-normative example of a payload of a signed Request Object signed using a D
 
 # Permitted Response Types
 
-Given the Client bound assertion results in an issued Credential that must be retrieved from the Token Endpoint, the `response_type=code` parameter must be used. Additional `response_types` in a "hybrid" flow may be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
+Given the Client bound assertion results in an issued Credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow may be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
 
 For mobile applications and SPA's it is recommended to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth clients [@!RFC7636] protocol to mitigate authorization code attacks.
 
@@ -163,7 +165,7 @@ Non-normative example
 `credential_formats_support : [ "jsonld", "jwt" ]`
   
 # Authorization Request
-
+The Authorization Request follows OpenID Connect 1.0 [OpenID Connect Core 1.0] including the `request` parameter and the additional `credential_format` parameter.
 
 A non-normative example of the Authorization request.
 
@@ -190,7 +192,7 @@ A non-normative example of a Credential issued as a [@!W3C Verifiable Credential
 {
   "@context": [
     "https://www.w3.org/2018/credentials/v1",
-    "https://issuer.example.org"
+    "https://issuer.example.org/courses"
   ],
   "id": "https://issuer.example.org/credentials/3732",
   "type": [
@@ -212,8 +214,5 @@ A non-normative example of a Credential issued as a [@!W3C Verifiable Credential
   "proof": {}
 }
 ```
+
 {backmatter}
-
-
-
-
