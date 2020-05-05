@@ -121,16 +121,16 @@ A credentials claim is added to the Request Object containing desired claim valu
 
 
   
-# Credential Format Parameter
+# Credential Options Parameter
 
 An additional parameter `credential_options` can be included by the Client in the Request Object.
 The paramater can accept a body used to request a specific atribute for the Credential to be issued.
 
 format
-: OPTIONAL. requested format of the issued credential
+: OPTIONAL. Requested format of the issued Credential, values supported by the OP should be found in the meta-data endpoint.
 
-type
-: OPTIONAL if `format` value is `jsonld`
+type  
+: OPTIONAL. Used to explicitly request a Credential Type usually derived from an offer. Only REQUIRED if `format` value is `jsonld`.
 
 A non-normative example
 `"credential_options": {"format": "jsonld", "type": "FoundationTrainingCredential"}`
