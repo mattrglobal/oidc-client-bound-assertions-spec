@@ -119,6 +119,34 @@ If the Request Object signing validation fails or is missing, the OpenID Connect
 
 A credentials claim is added to the Request Object containing desired claim values, or a reference to them, to be included in the resulting Credential.
 
+
+  
+# Credential Format Parameter
+
+An additional parameter `credential_options` can be included by the Client in the Request Object.
+The paramater can accept a body used to request a specific atribute for the Credential to be issued.
+
+format
+: OPTIONAL. requested format of the issued credential
+
+type
+: OPTIONAL if `format` value is `jsonld`
+
+A non-normative example
+`"credential_options": {"format": "jsonld", "type": "FoundationTrainingCredential"}`
+
+If the OP does not support a Credential issuance in the format requested the OP will respond to the Authorization request following OAuth2.0 Error Response Parameters [@!RFC6749] with Error code: `invalid_request`.
+
+If the parameter is omitted, the OP is permitted to default to a Credential `format` and `type` that the Client will receive.
+
+OpenID metadata endpoint should advertise the supported formats for the Credential.  
+
+Non-normative example
+`credential_formats_support : [ "jsonld", "jwt" ]`
+
+
+# Request Object
+
 A non-normative example of a payload of a signed Request Object signed using a Decentralized Identifier.
 
 ```
@@ -129,6 +157,7 @@ A non-normative example of a payload of a signed Request Object signed using a D
 "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
 "redirect_uri": "https://client.example.com/callback",
 "max_age": 86400,
+"credential_options": {"format": "jsonld", "type": "FoundationTrainingCredential"}
 "claims": 
 	{ 
     "id_token": {}, 
@@ -140,30 +169,16 @@ A non-normative example of a payload of a signed Request Object signed using a D
     }
   }
 }
-```
-  
+```  
 
 # Permitted Response Types
 
-Given the Client bound assertion results in an issued Credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow may be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
+Given the Client bound assertion results in an issued Credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow MAY be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
 
 For mobile applications and SPA's it is recommended to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth clients [@!RFC7636] protocol to mitigate authorization code attacks.
 
 
-# Credential Format Parameter
 
-An additional parameter `credential_format` can OPTIONALLY be included by the Client in the Authorization Request to request a specific format for the Credential, for example `jsonld`.
-
-If the OP does not support a Credential issuance in the format requested
-the OP will respond to the Authorization request following OAuth2.0 Error Response Parameters [@!RFC6749] with Error code: `invalid_request`.
-
-If the parameter is omitted, the OP is permitted to default to a Credential format that the Client will receive.
-
-OpenID metadata endpoint should advertise the supported formats for the Credential.  
-
-Non-normative example
-`credential_formats_support : [ "jsonld", "jwt" ]`
-  
 # Authorization Request
 The Authorization Request follows OpenID Connect 1.0 [OpenID Connect Core 1.0] including the `request` parameter and the additional `credential_format` parameter.
 
@@ -176,11 +191,29 @@ https://tenant.platform.mattr.global/authorize
 &code_challenge_method=S256
 &state=h27hjdnk2
 &nonce=hajjdjgkf87
-&credential_format=jsonld
 &request=<signed-jwt-request-obj>
 ```
 
+# Authentication Response and Token Endpoint
+Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the `code` parameter always being returned with the Authorization Code Flow.
 
+On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
+
+The Reponse from the Token Endpoint MUST include the Credential in the form of an object with `type` and `value` containing the Credential.
+
+Non-normative example
+```
+{
+ "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+ "token_type": "bearer",
+ "expires_in": 86400,
+ "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
+ "credential" {
+		"type": "jsonld",
+		"value": "XaZuzlrVWPaI-zx1_F0Q_mVmRUyh_4Hl...Ryh"
+			}
+}
+```
 # Credential
 
 The Credential is a bound assertion about the client containing claims about the identity of the subject. It is intended to be long-lived and verifiable that the claims were issued to the client by the issuer.
