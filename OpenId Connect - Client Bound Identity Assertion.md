@@ -127,13 +127,13 @@ An additional parameter `credential_options` can be included by the Client in th
 The paramater can accept a body used to request a specific atribute for the Credential to be issued.
 
 format
-: OPTIONAL. Requested format of the issued Credential, values supported by the OP should be found in the meta-data endpoint.
+: OPTIONAL. Requested format of the issued Credential, values supported by the OP SHOULD be found in the meta-data endpoint.
 
 type  
-: OPTIONAL. Used to explicitly request a Credential Type usually derived from an offer. Only REQUIRED if `format` value is `jsonld`.
+: OPTIONAL. Used to explicitly request a Credential Type usually derived from an offer. RECOMMENDED if `format` value is `jsonld`.
 
 A non-normative example
-`"credential_options": {"format": "jsonld", "type": "FoundationTrainingCredential"}`
+`"credential_options": {"format": "jsonld", "type": [ "FoundationTrainingCredential"]}`
 
 If the OP does not support a Credential issuance in the format requested the OP will respond to the Authorization request following OAuth2.0 Error Response Parameters [@!RFC6749] with Error code: `invalid_request`.
 
@@ -157,7 +157,7 @@ A non-normative example of a payload of a signed Request Object signed using a D
 "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
 "redirect_uri": "https://client.example.com/callback",
 "max_age": 86400,
-"credential_options": {"format": "jsonld", "type": "FoundationTrainingCredential"}
+"credential_options": {"format": "jsonld", "type": [ "FoundationTrainingCredential"]}
 "claims": 
 	{ 
     "id_token": {}, 
@@ -185,7 +185,7 @@ The Authorization Request follows OpenID Connect 1.0 [OpenID Connect Core 1.0] i
 A non-normative example of the Authorization request.
 
 ```
-https://tenant.platform.mattr.global/authorize
+https://issuer.example.com/authorize
 ?scope=openid%20openid:credential
 &code_challenge=DuMlifAQ_thUmJj6HeWfYC-xUvkvAFcpI_4jaelgX1o
 &code_challenge_method=S256
@@ -199,7 +199,7 @@ Successful and Error Authentication Response are in the same manor as OpenID Con
 
 On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
 
-The Reponse from the Token Endpoint MUST include the Credential in the form of an object with `type` and `value` containing the Credential.
+The Reponse from the Token Endpoint MUST include the Credential in the form of an object with `format` and `value` containing the Credential.
 
 Non-normative example
 ```
@@ -209,7 +209,7 @@ Non-normative example
  "expires_in": 86400,
  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
  "credential" {
-		"type": "jsonld",
+		"format": "jsonld",
 		"value": "XaZuzlrVWPaI-zx1_F0Q_mVmRUyh_4Hl...Ryh"
 			}
 }
