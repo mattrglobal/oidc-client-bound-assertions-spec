@@ -194,28 +194,7 @@ https://issuer.example.com/authorize
 &request=<signed-jwt-request-obj>
 ```
 
-# Authentication Response and Token Endpoint
-Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the `code` parameter always being returned with the Authorization Code Flow.
-
-On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
-
-The Reponse from the Token Endpoint MUST include the Credential in the form of an object with `format` and `value` containing the Credential.
-
-Non-normative example
-```
-{
- "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
- "token_type": "bearer",
- "expires_in": 86400,
- "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
- "credential" {
-		"format": "jsonld",
-		"value": "XaZuzlrVWPaI-zx1_F0Q_mVmRUyh_4Hl...Ryh"
-			}
-}
-```
 # Credential
-
 The Credential is a bound assertion about the client containing claims about the identity of the subject. It is intended to be long-lived and verifiable that the claims were issued to the client by the issuer.
 
 Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OP should make the supported Credential Types available at the OpenID Connect meta data endpoint.
@@ -247,5 +226,51 @@ A non-normative example of a Credential issued as a [@!W3C Verifiable Credential
   "proof": {}
 }
 ```
+
+# Authentication Response and Token Endpoint
+Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the `code` parameter always being returned with the Authorization Code Flow.
+
+On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
+
+The Reponse from the Token Endpoint MUST include the Credential in the form of an object with value for `format` and `data` containing the Credential.
+
+Non-normative example of a JSON-LD based Credential
+```
+{
+	"access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+	"token_type": "bearer",
+	"expires_in": 86400,
+	"id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+	"credential": {
+		"format": "jsonld",
+		"data": {
+			"@context": [
+				"https://www.w3.org/2018/credentials/v1",
+				"https://issuer.example.org/courses"
+			],
+			"id": "https://issuer.example.org/credentials/3732",
+			"type": [
+				"VerifiableCredential",
+				"FoundationTrainingCredential"
+			],
+			"issuer": {
+				"id": "did:ion:76e12ec712ebc6f1c221ebfeb1f",
+				"domain": "example.org"
+			},
+			"credentialSubject": {
+				"id": "did:ion:c48c8af27918117616ea2a4f7f",
+				"givenName": "Jane",
+				"familyName": "Doe",
+				"courseDate": "2020-01-07",
+				"courseName": "Foundation Training",
+				"expiryDate": "2020-08-07"
+			},
+			"proof": {}
+		}
+	}
+}
+```
+
+
 
 {backmatter}
