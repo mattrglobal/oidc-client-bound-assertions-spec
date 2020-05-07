@@ -119,6 +119,34 @@ If the Request Object signing validation fails or is missing, the OpenID Connect
 
 A credentials claim is added to the Request Object containing desired claim values, or a reference to them, to be included in the resulting Credential.
 
+
+  
+# Credential Options Parameter
+
+An additional parameter `credential_options` can be included by the Client in the Request Object.
+The paramater can accept a body used to request a specific atribute for the Credential to be issued.
+
+format  
+: OPTIONAL. Requested format of the issued Credential, values supported by the OP SHOULD be found in the meta-data endpoint.
+
+type  
+: OPTIONAL. Used to explicitly request a Credential Type usually derived from an offer. RECOMMENDED if `format` value is `jsonld`.
+
+A non-normative example
+`"credential_options": {"format": "jsonld", "type": [ "FoundationTrainingCredential"]}`
+
+If the OP does not support a Credential issuance in the format requested the OP will respond to the Authorization request following OAuth2.0 Error Response Parameters [@!RFC6749] with Error code: `invalid_request`.
+
+If the parameter is omitted, the OP is permitted to default to a Credential `format` and `type` that the Client will receive.
+
+OpenID metadata endpoint should advertise the supported formats for the Credential.  
+
+Non-normative example
+`credential_formats_support : [ "jsonld", "jwt" ]`
+
+
+# Request Object
+
 A non-normative example of a payload of a signed Request Object signed using a Decentralized Identifier.
 
 ```
@@ -129,6 +157,7 @@ A non-normative example of a payload of a signed Request Object signed using a D
 "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
 "redirect_uri": "https://client.example.com/callback",
 "max_age": 86400,
+"credential_options": {"format": "jsonld", "type": [ "FoundationTrainingCredential"]}
 "claims": 
 	{ 
     "id_token": {}, 
@@ -140,49 +169,32 @@ A non-normative example of a payload of a signed Request Object signed using a D
     }
   }
 }
-```
-  
+```  
 
 # Permitted Response Types
 
-Given the Client bound assertion results in an issued Credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow may be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
+Given the Client bound assertion results in an issued Credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow MAY be used; `token` and `id_token`; however, this is not recommended if these are to contain personally identifiable information about the subject.
 
 For mobile applications and SPA's it is recommended to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth clients [@!RFC7636] protocol to mitigate authorization code attacks.
 
 
-# Credential Format Parameter
 
-An additional parameter `credential_format` can OPTIONALLY be included by the Client in the Authorization Request to request a specific format for the Credential, for example `jsonld`.
-
-If the OP does not support a Credential issuance in the format requested
-the OP will respond to the Authorization request following OAuth2.0 Error Response Parameters [@!RFC6749] with Error code: `invalid_request`.
-
-If the parameter is omitted, the OP is permitted to default to a Credential format that the Client will receive.
-
-OpenID metadata endpoint should advertise the supported formats for the Credential.  
-
-Non-normative example
-`credential_formats_support : [ "jsonld", "jwt" ]`
-  
 # Authorization Request
 The Authorization Request follows OpenID Connect 1.0 [OpenID Connect Core 1.0] including the `request` parameter and the additional `credential_format` parameter.
 
 A non-normative example of the Authorization request.
 
 ```
-https://tenant.platform.mattr.global/authorize
+https://issuer.example.com/authorize
 ?scope=openid%20openid:credential
 &code_challenge=DuMlifAQ_thUmJj6HeWfYC-xUvkvAFcpI_4jaelgX1o
 &code_challenge_method=S256
 &state=h27hjdnk2
 &nonce=hajjdjgkf87
-&credential_format=jsonld
 &request=<signed-jwt-request-obj>
 ```
 
-
 # Credential
-
 The Credential is a bound assertion about the client containing claims about the identity of the subject. It is intended to be long-lived and verifiable that the claims were issued to the client by the issuer.
 
 Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OP should make the supported Credential Types available at the OpenID Connect meta data endpoint.
@@ -214,5 +226,51 @@ A non-normative example of a Credential issued as a [@!W3C Verifiable Credential
   "proof": {}
 }
 ```
+
+# Authentication Response and Token Endpoint
+Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the `code` parameter always being returned with the Authorization Code Flow.
+
+On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
+
+The Reponse from the Token Endpoint MUST include the Credential in the form of an object with value for `format` and `data` containing the Credential.
+
+Non-normative example of a JSON-LD based Credential
+```
+{
+	"access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+	"token_type": "bearer",
+	"expires_in": 86400,
+	"id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+	"credential": {
+		"format": "jsonld",
+		"data": {
+			"@context": [
+				"https://www.w3.org/2018/credentials/v1",
+				"https://issuer.example.org/courses"
+			],
+			"id": "https://issuer.example.org/credentials/3732",
+			"type": [
+				"VerifiableCredential",
+				"FoundationTrainingCredential"
+			],
+			"issuer": {
+				"id": "did:ion:76e12ec712ebc6f1c221ebfeb1f",
+				"domain": "example.org"
+			},
+			"credentialSubject": {
+				"id": "did:ion:c48c8af27918117616ea2a4f7f",
+				"givenName": "Jane",
+				"familyName": "Doe",
+				"courseDate": "2020-01-07",
+				"courseName": "Foundation Training",
+				"expiryDate": "2020-08-07"
+			},
+			"proof": {}
+		}
+	}
+}
+```
+
+
 
 {backmatter}
