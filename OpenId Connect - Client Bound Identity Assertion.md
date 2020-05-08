@@ -273,5 +273,4 @@ Non-normative example of a JSON-LD based Credential
 ```
 
 
-
 {backmatter}
