@@ -62,6 +62,7 @@ This specification defines how the OpenID Connect protocol can be extended so th
  5. Credential Format Paramter
  6. Authorization Request
  7. Credential
+ 8. Authentication Response and Token Endpoint
 
 {mainmatter}
 
