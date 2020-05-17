@@ -14,4 +14,4 @@ Update `client-bound-end-user-assertion.md` file with your desired changes.
 
 Run the following to compile the new txt into the output HTML and XML.
 
-```docker run -v`pwd`:/data danielfett/markdown2rfc client-bound-end-user-assertion.md```
+```./scripts/build-html.sh```

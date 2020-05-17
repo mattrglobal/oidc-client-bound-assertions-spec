@@ -5,9 +5,8 @@
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
 <title>Client Bound End-User Assertion</title>
-<meta content="John Thompson" name="author">
 <meta content="Tobias Looker" name="author">
-<meta content="Nader Helmy" name="author">
+<meta content="John Thompson" name="author">
 <meta content="
        OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User. 
        Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the  id_token  or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations. 
@@ -1075,7 +1074,7 @@ tr:nth-child(2n+1) > td {
 <td class="right">May 2020</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Thompson, et al.</td>
+<td class="left">Looker &amp; Thompson</td>
 <td class="center">Informational</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1084,7 +1083,7 @@ tr:nth-child(2n+1) > td {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">Network Working Group</dd>
+<dd class="workgroup">none</dd>
 <dt class="label-individual-draft">Individual-Draft:</dt>
 <dd class="individual-draft">client-bound-end-user-assertion</dd>
 <dt class="label-published">Published:</dt>
@@ -1096,15 +1095,11 @@ tr:nth-child(2n+1) > td {
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
-      <div class="author-name">J. Thompson</div>
-<div class="org">MATTR Ltd</div>
-</div>
-<div class="author">
       <div class="author-name">T. Looker</div>
 <div class="org">MATTR Ltd</div>
 </div>
 <div class="author">
-      <div class="author-name">N. Helmy</div>
+      <div class="author-name">J. Thompson</div>
 <div class="org">MATTR Ltd</div>
 </div>
 </dd>
@@ -1279,12 +1274,12 @@ tr:nth-child(2n+1) > td {
   "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "aud": "https://issuer.example.com",
   "response_type": "code",
-  "Client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub": "did:example:123456",
   "registration": {
      "jwks_uri": "did:example:123456"
   },
-  "redirect_uri": "https://Client.example.com/callback",
+  "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
   "claims":
