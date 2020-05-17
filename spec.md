@@ -8,7 +8,7 @@ keyword = [""]
 
 [seriesInfo]
 name = "Individual-Draft"
-value = "client-bound-end-user-assertion-01"
+value = "client-bound-end-user-assertion"
 status = "informational"
 
 [[author]]
@@ -120,9 +120,6 @@ Where the decoded payload of the request parameter is as follows
   "response_type": "code",
   "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub": "did:example:123456",
-  "registration": {
-     "jwks_uri": "did:example:123456"
-  },
   "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
