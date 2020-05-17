@@ -10,7 +10,7 @@ The tool `markdown2rfc` is used to convert the raw markdown representation to bo
 
 ### Updating Docs
 
-Update `client-bound-end-user-assertion.md` file with your desired changes.
+Update `spec.md` file with your desired changes.
 
 Run the following to compile the new txt into the output HTML and XML.
 
