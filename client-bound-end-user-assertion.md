@@ -1,30 +1,15 @@
-
-Client Bound End-User Assertion
-
 %%%
 title = "Client Bound End-User Assertion"
 abbrev = "Client Bound End-User Assertion"
-ipr= ""
-area = "Internet"
-workgroup = "Working Group"
-submissiontype = "IETF"
+ipr = "none"
+workgroup = "none"
 keyword = [""]
 #date = 2020-04-028T00:00:00Z
 
 [seriesInfo]
-name = "RFC"
-value = "3514"
-stream = "IETF"
+name = "Individual-Draft"
+value = "client-bound-end-user-assertion-01"
 status = "informational"
-
-[[author]]
-initials = "J."
-surname = "Thompson"
-fullname = "John Thompson"
-#role = "editor"
-organization = "MATTR Ltd"
-  [author.address]
-  email = "john.thompson@mattr.global"
 
 [[author]]
 initials = "T."
@@ -36,13 +21,13 @@ organization = "MATTR Ltd"
   email = "tobias.looker@mattr.global"
 
 [[author]]
-initials = "N."
-surname = "Helmy"
-fullname = "Nader Helmy"
-#role = "reviewer"
+initials = "J."
+surname = "Thompson"
+fullname = "John Thompson"
+#role = "editor"
 organization = "MATTR Ltd"
   [author.address]
-  email = "nader.helmy@mattr.global"
+  email = "john.thompson@mattr.global"
 %%%
 
 .# Abstract
@@ -53,29 +38,11 @@ Typically the format of the assertion obtained about the End-User in the OpenID 
 
 This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.
 
-### Table of Contents
- 1. Introduction
-  1.1 Requirements Notation and Conventions
-  1.2 Terminology
-  1.3 Overview
- 2. Credential Request
-  2.1 Example
-  2.2 Credential Scope
-  2.3 Request Object
-  2.4 Response Types
-  2.5 Requesting credential claims using the "claims" request parameter
-  2.6 Credential Options Parameter
- 3. Credential Response
-  3.1 Credential
-  3.2 Authentication Response and Token Endpoint
- 4. Credential Offer 
- 5. OpenID Provider Metadata 
-
 {mainmatter}
 
-# Introduction
+# Introduction {#Introduction}
 
-OpenID Connect 1.0 [OpenID Connect Core 1.0] is a simple identity layer on top of the OAuth 2.0 [@!RFC6749] protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
+OpenID Connect 1.0 [OpenID Connect Core 1.0] is a simple identity layer on top of the OAuth 2.0 `@!RFC6749` protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
 Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.
 
@@ -83,13 +50,13 @@ This specification defines how the OpenID Connect protocol can be extended so th
 
 ## Requirements Notation and Conventions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OpenID ProviderTIONAL" in this document are to be interpreted as described in RFC 2119 [@!RFC2119].
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OpenID ProviderTIONAL" in this document are to be interpreted as described in RFC 2119 `@!RFC2119`.
 
 In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.
 
 All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.
 
-## Terminology
+## Terminology {#Terminology}
 
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
@@ -151,12 +118,12 @@ Where the decoded payload of the request parameter is as follows
   "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "aud": "https://issuer.example.com",
   "response_type": "code",
-  "Client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub": "did:example:123456",
   "registration": {
      "jwks_uri": "did:example:123456"
   },
-  "redirect_uri": "https://Client.example.com/callback",
+  "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
   "claims": 
@@ -208,7 +175,7 @@ A credential request flow MUST use the [authorization code flow](https://openid.
 
 Given that a credential request flow, results in a credential that MUST be retrieved from the Token Endpoint, the `response_type=code` parameter MUST be used. Additional `response_types` in a "hybrid" flow MAY be used; `token` and `id_token`; however, this is NOT recommended if these are to contain personally identifiable information about the subject.
 
-For mobile applications and SPA's it is RECOMMENDED to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth Clients [@!RFC7636] protocol.
+For mobile applications and SPA's it is RECOMMENDED to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth Clients `@!RFC7636` protocol.
 
 ## Requesting a credential using the credential request parameter
 
@@ -241,7 +208,7 @@ A non-normative example of a payload of a signed Request Object.
 
 A Credential is a Client bound assertion describing the End-User authenticated in an OpenID flow. Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider should make the supported credential formats available at their openid-configuration meta-data endpoint.
 
-The following is a non-normative example of a Credential issued as a [@!W3C Verifiable Credential 1.0] compliant format in JSON-LD.
+The following is a non-normative example of a Credential issued as a `@!W3C Verifiable Credential 1.0` compliant format in JSON-LD.
 
 ```
 {
@@ -363,5 +330,3 @@ The following is a non-normative example of the relevant entries in the openid-c
   ]
 }
 ```
-
-{backmatter}
