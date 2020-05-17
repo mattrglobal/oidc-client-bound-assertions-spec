@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- name="GENERATOR" content="github.com/mmarkdown/mmark Mmark Markdown Processor - mmark.miek.nl" -->
+<rfc version="3" ipr="none" docName="client-bound-end-user-assertion-01" submissionType="IETF" category="info" xml:lang="en" xmlns:xi="http://www.w3.org/2001/XInclude" consensus="true">
+
+<front>
+<title abbrev="Client Bound End-User Assertion">Client Bound End-User Assertion</title><seriesInfo value="client-bound-end-user-assertion-01" status="informational" name="Individual-Draft"></seriesInfo>
+<author initials="J." surname="Thompson" fullname="John Thompson"><organization>MATTR Ltd</organization><address><postal><street></street>
+</postal><email>john.thompson@mattr.global</email>
+</address></author>
+<author initials="T." surname="Looker" fullname="Tobias Looker"><organization>MATTR Ltd</organization><address><postal><street></street>
+</postal><email>tobias.looker@mattr.global</email>
+</address></author>
+<author initials="N." surname="Helmy" fullname="Nader Helmy"><organization>MATTR Ltd</organization><address><postal><street></street>
+</postal><email>nader.helmy@mattr.global</email>
+</address></author>
+<date/>
+<area>Internet</area>
+<workgroup>none</workgroup>
+
+<abstract>
+<t>OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.</t>
+<t>Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the <tt>id_token</tt> or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.</t>
+<t>This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.</t>
+</abstract>
+
+</front>
+
+<middle>
+
+<section anchor="Introduction"><name>Introduction</name>
+<t>OpenID Connect 1.0 [OpenID Connect Core 1.0] is a simple identity layer on top of the OAuth 2.0 <tt>@!RFC6749</tt> protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.</t>
+<t>Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the <tt>id_token</tt> or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.</t>
+<t>This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.</t>
+
+<section anchor="requirements-notation-and-conventions"><name>Requirements Notation and Conventions</name>
+<t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OpenID ProviderTIONAL&quot; in this document are to be interpreted as described in RFC 2119 <tt>@!RFC2119</tt>.</t>
+<t>In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.</t>
+<t>All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.</t>
+</section>
+
+<section anchor="Terminology"><name>Terminology</name>
+<t>This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:</t>
+
+<dl>
+<dt>Credential</dt>
+<dd><t>An assertion made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.</t>
+</dd>
+<dt>Credential Request</dt>
+<dd><t>An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.</t>
+</dd>
+</dl>
+</section>
+
+<section anchor="overview"><name>Overview</name>
+<t>This specification extends the OpenID Connect protocol for the purposes of credential issuance.</t>
+
+<ol>
+<li><t>The Client sends a credential request to the OpenID Provider (OpenID Provider).</t>
+</li>
+<li><t>The OpenID Provider authenticates the End-User and obtains authorization.</t>
+</li>
+<li><t>The OpenID Provider responds with a Credential.</t>
+</li>
+</ol>
+<t>These steps are illustrated in the following diagram:</t>
+
+<artwork>+--------+                                   +----------+
+|        |                                   |          |
+|        |------(1) Credential Request------&gt;|          |
+|        |                                   |          |
+|        |  +--------+                       |          |
+|        |  |        |                       |          |
+| Client |  |  End-  |&lt;--(2) AuthN &amp; AuthZ--&gt;|    OP    |
+|        |  |  User  |                       |          |
+|        |  |        |                       |          |
+|        |  +--------+                       |          |
+|        |                                   |          |
+|        |&lt;-----(3) Credential Response------|          |
+|        |                                   |          |
++--------+                                   +----------+
+</artwork>
+</section>
+</section>
+
+<section anchor="credential-request"><name>Credential Request</name>
+<t>A credential request is an OpenID Connect authentication request that requests that the End-User be authenticated by the Authorization Server and a credential containing the requested claims about the End-User be issued to the Client.</t>
+<t>The following section outlines how an <eref target="https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">OpenID Connect Authentication Request</eref> must be extended in order for it to be considered a credential request.</t>
+
+<section anchor="example"><name>Example</name>
+<t>The credential request follows OpenID Connect 1.0 <eref target="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</eref> including the required usage of the <tt>request</tt> parameter.</t>
+<t>A non-normative example of the Authorization request.</t>
+
+<artwork>https://issuer.example.com/authorize
+?scope=openid%20openid:credential
+&amp;request=&lt;signed-jwt-request-obj&gt;
+</artwork>
+<t>Where the decoded payload of the request parameter is as follows</t>
+
+<artwork>{
+  &quot;iss&quot;: &quot;IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH&quot;,
+  &quot;aud&quot;: &quot;https://issuer.example.com&quot;,
+  &quot;response_type&quot;: &quot;code&quot;,
+  &quot;Client_id&quot;: &quot;IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH&quot;,
+  &quot;sub&quot;: &quot;did:example:123456&quot;,
+  &quot;registration&quot;: {
+     &quot;jwks_uri&quot;: &quot;did:example:123456&quot;
+  },
+  &quot;redirect_uri&quot;: &quot;https://Client.example.com/callback&quot;,
+  &quot;credential_format&quot;: &quot;w3cvc-jsonld&quot;,
+  &quot;max_age&quot;: 86400,
+  &quot;claims&quot;: 
+	{ 
+    &quot;credential&quot;: { 
+      &quot;given_name&quot;: {&quot;essential&quot;: true},
+      &quot;last_name&quot;: {&quot;essential&quot;: true},
+      &quot;https://www.w3.org/2018/credentials/examples/v1/degree&quot;: {&quot;essential&quot;: true}
+    },
+  }
+}
+</artwork>
+</section>
+
+<section anchor="request-parameters"><name>Request Parameters</name>
+<t>A credential request uses the OpenID and OAuth2.0 request parameters as outlined in section <eref target="https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">3.1.2.1</eref> of OpenID Connect core, except for the following additional constraints.</t>
+
+<dl>
+<dt>scope</dt>
+<dd><t>REQUIRED. A credential request MUST contain the <tt>openid:credential</tt> scope value in the second position directly after the <tt>openid</tt> scope.</t>
+</dd>
+<dt>response_type</dt>
+<dd><t>REQUIRED. OAuth 2.0 Response Type value that determines the authorization processing flow to be used, including what parameters are returned from the endpoints used. In a credential request this value MUST be set to <tt>code</tt>, no other values are to be supported.</t>
+</dd>
+<dt>credential_format</dt>
+<dd><t>REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the <tt>credential_formats_supported</tt> attribute.</t>
+</dd>
+<dt>sub</dt>
+<dd><t>REQUIRED. Defines the identifier the Client is requesting that the subject be referred to as, in the resulting obtained credential.</t>
+</dd>
+</dl>
+</section>
+
+<section anchor="request-parameter"><name>Request Parameter</name>
+<t>Usage of the <tt>request</tt> parameter as defined in section <eref target="https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter">5.5</eref> of OpenID Connect core is REQUIRED in a credential request.</t>
+<t>The value of the <tt>request</tt> parameter MUST either be a valid JWT or JWE whose claims are the credential request parameters.</t>
+<t>Unsigned plaintext Request Objects, containing <tt>none</tt> in the <tt>alg</tt> value of the JOSE header MUST not be supported.</t>
+<t>The Request Object MAY also be encrypted using <eref target="https://tools.ietf.org/html/rfc7516">JWE</eref>, however the inner payload MUST be a valid <eref target="https://tools.ietf.org/html/rfc7519">JWT</eref> signed by the Client who created the request.</t>
+<t>Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a credential request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the use of a <eref target="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request</eref> defined in OpenID Connect Core.</t>
+<t>To bind the credential request to the Client making the request, the Request Object MUST be signed by the Client using a public private key pair the Client is in possession of.</t>
+<t>If the Request Object signing validation fails or is missing, the OpenID Connect Provider MUST respond to the request with the Error Response parameter, <eref target="https://openid.net/specs/openid-connect-core-1_0.html#AuthError">section 3.1.2.6.</eref> with Error code: <tt>invalid_request_object</tt>.</t>
+</section>
+
+<section anchor="response-types"><name>Response Types</name>
+<t>A credential request flow MUST use the <eref target="https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps">authorization code flow</eref> as defined in OpenID Connect core.</t>
+<t>Given that a credential request flow, results in a credential that MUST be retrieved from the Token Endpoint, the <tt>response_type=code</tt> parameter MUST be used. Additional <tt>response_types</tt> in a &quot;hybrid&quot; flow MAY be used; <tt>token</tt> and <tt>id_token</tt>; however, this is NOT recommended if these are to contain personally identifiable information about the subject.</t>
+<t>For mobile applications and SPA's it is RECOMMENDED to follow the use of the [Proof Key Code Exchange (PKCE) by OAuth Clients <tt>@!RFC7636</tt> protocol.</t>
+</section>
+
+<section anchor="requesting-a-credential-using-the-credential-request-parameter"><name>Requesting a credential using the credential request parameter</name>
+<t>A non-normative example of a payload of a signed Request Object.</t>
+
+<artwork>{
+  &quot;iss&quot;: &quot;IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH&quot;,
+  &quot;aud&quot;: &quot;https://issuer.example.com&quot;,
+  &quot;response_type&quot;: &quot;code&quot;,
+  &quot;Client_id&quot;: &quot;IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH&quot;,
+  &quot;sub&quot;: &quot;did:example:123456&quot;,
+  &quot;redirect_uri&quot;: &quot;https://Client.example.com/callback&quot;,
+  &quot;credential_format&quot;: &quot;w3cvc-jsonld&quot;,
+  &quot;max_age&quot;: 86400,
+  &quot;claims&quot;: 
+	{ 
+    &quot;credential&quot;: { 
+      &quot;given_name&quot;: {&quot;essential&quot;: true},
+      &quot;last_name&quot;: {&quot;essential&quot;: true},
+      &quot;https://www.w3.org/2018/credentials/examples/v1/degree&quot;: {&quot;essential&quot;: true}
+    },
+  }
+}
+</artwork>
+</section>
+</section>
+
+<section anchor="credential-response"><name>Credential Response</name>
+
+<section anchor="credential"><name>Credential</name>
+<t>A Credential is a Client bound assertion describing the End-User authenticated in an OpenID flow. Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider should make the supported credential formats available at their openid-configuration meta-data endpoint.</t>
+<t>The following is a non-normative example of a Credential issued as a <tt>@!W3C Verifiable Credential 1.0</tt> compliant format in JSON-LD.</t>
+
+<artwork>{
+  &quot;@context&quot;: [
+    &quot;https://www.w3.org/2018/credentials/v1&quot;,
+    &quot;https://www.w3.org/2018/credentials/examples/v1&quot;
+  ],
+  &quot;id&quot;: &quot;http://example.gov/credentials/3732&quot;,
+  &quot;type&quot;: [&quot;VerifiableCredential&quot;, &quot;UniversityDegreeCredential&quot;],
+  &quot;issuer&quot;: &quot;did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd&quot;,
+  &quot;issuanceDate&quot;: &quot;2020-03-10T04:24:12.164Z&quot;,
+  &quot;credentialSubject&quot;: {
+    &quot;id&quot;: &quot;did:example:123456&quot;,
+    &quot;givenName&quot;: &quot;John&quot;,
+    &quot;familyName&quot;: &quot;Doe&quot;,
+    &quot;degree&quot;: {
+      &quot;type&quot;: &quot;BachelorDegree&quot;,
+      &quot;name&quot;: &quot;Bachelor of Science and Arts&quot;
+    }
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;Ed25519Signature2018&quot;,
+    &quot;created&quot;: &quot;2020-04-10T21:35:35Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd#z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;jws&quot;: &quot;eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA&quot;
+  }
+}
+</artwork>
+</section>
+
+<section anchor="token-endpoint-response"><name>Token Endpoint Response</name>
+<t>Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the <tt>code</tt> parameter always being returned with the Authorization Code Flow.</t>
+<t>On Request to the Token Endpoint the <tt>grant_type</tt> value MUST be <tt>authorization_code</tt> inline with the Authorization Code Flow and the <tt>code</tt> value included as a parameter.</t>
+<t>The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <tt>format</tt> indicating the credentials format and <tt>data</tt> containing the Credential.</t>
+<t>The following is a non-normative example of a JSON-LD based Credential.</t>
+
+<artwork>{
+	&quot;access_token&quot;: &quot;eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ&quot;,
+	&quot;token_type&quot;: &quot;bearer&quot;,
+	&quot;expires_in&quot;: 86400,
+	&quot;id_token&quot;: &quot;eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz&quot;,
+	&quot;credential&quot;: {
+		&quot;format&quot;: &quot;w3cvc-jsonld&quot;,
+		&quot;data&quot;: {
+      &quot;@context&quot;: [
+        &quot;https://www.w3.org/2018/credentials/v1&quot;,
+        &quot;https://www.w3.org/2018/credentials/examples/v1&quot;
+      ],
+      &quot;id&quot;: &quot;http://example.gov/credentials/3732&quot;,
+      &quot;type&quot;: [&quot;VerifiableCredential&quot;, &quot;UniversityDegreeCredential&quot;],
+      &quot;issuer&quot;: &quot;did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd&quot;,
+      &quot;issuanceDate&quot;: &quot;2020-03-10T04:24:12.164Z&quot;,
+      &quot;credentialSubject&quot;: {
+        &quot;id&quot;: &quot;did:example:123456&quot;,
+        &quot;degree&quot;: {
+          &quot;type&quot;: &quot;BachelorDegree&quot;,
+          &quot;name&quot;: &quot;Bachelor of Science and Arts&quot;
+        }
+      },
+      &quot;proof&quot;: {
+        &quot;type&quot;: &quot;Ed25519Signature2018&quot;,
+        &quot;created&quot;: &quot;2020-04-10T21:35:35Z&quot;,
+        &quot;verificationMethod&quot;: &quot;did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd#z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd&quot;,
+        &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+        &quot;jws&quot;: &quot;eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA&quot;
+      }
+    }
+	}
+}
+</artwork>
+</section>
+</section>
+
+<section anchor="credential-offer"><name>Credential Offer</name>
+<t>The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.</t>
+<t>The following is a non-normative example of a invocable URL pointing to a credential offer offered by the OpenID Provider <tt>issuer.example.com</tt></t>
+
+<artwork>openid://offer?https://issuer.example.com/.well-known/openid-configuration#/credential_offers[0]
+</artwork>
+</section>
+
+<section anchor="openid-provider-metadata"><name>OpenID Provider Metadata</name>
+<t>An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery].</t>
+
+<dl>
+<dt><tt>credential_supported</tt></dt>
+<dd><t>Boolean value indicating that the OpenID provider supports the credential issuance flow.</t>
+</dd>
+<dt><tt>credential_formats_supported</tt></dt>
+<dd><t>A JSON array of strings identifying the resulting format of the credential issued at the end of the flow.</t>
+</dd>
+<dt><tt>credential_offers</tt></dt>
+<dd><t>A JSON array of objects, each of which describing a group of related claims that can be referred to when interacting with the OpenID provider.</t>
+</dd>
+</dl>
+<t>The following is a non-normative example of the relevant entries in the openid-configuration meta data for an OpenID Provider supporting the credential issuance flow</t>
+
+<artwork>{
+  &quot;credential_supported&quot;: true,
+  &quot;credential_formats_supported&quot;: [
+    &quot;w3cvc-jsonld&quot;,
+    &quot;jwt&quot;
+  ],
+  &quot;credential_offers&quot;: [
+    {
+      &quot;id&quot;: &quot;7234f6dd-ec4f-4814-b30b-ab91187e8648&quot;,
+      &quot;claims&quot;: [ 
+        &quot;given_name&quot;,
+        &quot;last_name&quot;,
+        &quot;https://www.w3.org/2018/credentials/examples/v1/degree&quot;
+      ]
+    }
+  ]
+}
+</artwork>
+</section>
+
+</middle>
+
+</rfc>
