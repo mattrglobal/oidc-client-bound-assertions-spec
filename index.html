@@ -1178,7 +1178,7 @@ tr:nth-child(2n+1) > td {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">OpenID Connect 1.0 [OpenID Connect Core 1.0] is a simple identity layer on top of the OAuth 2.0 <code>@!RFC6749</code> protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">OpenID Connect 1.0 <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> is a simple identity layer on top of the OAuth 2.0 <code>@!RFC6749</code> protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the <code>id_token</code> or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
@@ -1186,7 +1186,7 @@ tr:nth-child(2n+1) > td {
         <h3 id="name-requirements-notation-and-c">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-notation-and-c" class="section-name selfRef">Requirements Notation and Conventions</a>
         </h3>
-<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OpenID ProviderTIONAL" in this document are to be interpreted as described in RFC 2119 <code>@!RFC2119</code>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 <code>@!RFC2119</code>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1280,7 +1280,7 @@ tr:nth-child(2n+1) > td {
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
   "claims":
-        {
+  {
     "credential": {
       "given_name": {"essential": true},
       "last_name": {"essential": true},
@@ -1353,13 +1353,13 @@ tr:nth-child(2n+1) > td {
   "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "aud": "https://issuer.example.com",
   "response_type": "code",
-  "Client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub": "did:example:123456",
   "redirect_uri": "https://Client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
   "claims":
-        {
+  {
     "credential": {
       "given_name": {"essential": true},
       "last_name": {"essential": true},
@@ -1384,7 +1384,7 @@ tr:nth-child(2n+1) > td {
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-credential" class="section-name selfRef">Credential</a>
         </h3>
 <p id="section-3.1-1">A Credential is a Client bound assertion describing the End-User authenticated in an OpenID flow. Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider should make the supported credential formats available at their openid-configuration meta-data endpoint.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">The following is a non-normative example of a Credential issued as a <code>@!W3C Verifiable Credential 1.0</code> compliant format in JSON-LD.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The following is a non-normative example of a Credential issued as a <a href="https://www.w3.org/TR/vc-data-model/">W3C Verifiable Credential 1.0</a> compliant format in JSON-LD.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3.1-3">
 <pre>{
   "@context": [
@@ -1421,19 +1421,19 @@ tr:nth-child(2n+1) > td {
         <h3 id="name-token-endpoint-response">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-token-endpoint-response" class="section-name selfRef">Token Endpoint Response</a>
         </h3>
-<p id="section-3.2-1">Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">The following is a non-normative example of a JSON-LD based Credential.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3.2-5">
 <pre>{
-        "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-        "token_type": "bearer",
-        "expires_in": 86400,
-        "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-        "credential": {
-                "format": "w3cvc-jsonld",
-                "data": {
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "credential": {
+    "format": "w3cvc-jsonld",
+    "data": {
       "@context": [
         "https://www.w3.org/2018/credentials/v1",
         "https://www.w3.org/2018/credentials/examples/v1"
@@ -1457,7 +1457,7 @@ tr:nth-child(2n+1) > td {
         "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
       }
     }
-        }
+  }
 }
 </pre><a href="#section-3.2-5" class="pilcrow">¶</a>
 </div>
@@ -1483,7 +1483,7 @@ tr:nth-child(2n+1) > td {
       <h2 id="name-openid-provider-metadata">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-openid-provider-metadata" class="section-name selfRef">OpenID Provider Metadata</a>
       </h2>
-<p id="section-5-1">An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery].<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by <a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID-Discovery</a>.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-5-2">
         <dt id="section-5-2.1"><code>credential_supported</code></dt>
 <dd id="section-5-2.2">
