@@ -17,8 +17,8 @@ surname = "Looker"
 fullname = "Tobias Looker"
 #role = "reviewer"
 organization = "MATTR Ltd"
-  [author.address]
-  email = "tobias.looker@mattr.global"
+[author.address]
+email = "tobias.looker@mattr.global"
 
 [[author]]
 initials = "J."
@@ -26,8 +26,8 @@ surname = "Thompson"
 fullname = "John Thompson"
 #role = "editor"
 organization = "MATTR Ltd"
-  [author.address]
-  email = "john.thompson@mattr.global"
+[author.address]
+email = "john.thompson@mattr.global"
 %%%
 
 .# Abstract
@@ -42,7 +42,7 @@ This specification defines how the OpenID Connect protocol can be extended so th
 
 # Introduction {#Introduction}
 
-OpenID Connect 1.0 [OpenID Connect Core 1.0] is a simple identity layer on top of the OAuth 2.0 `@!RFC6749` protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
+OpenID Connect 1.0 [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer on top of the OAuth 2.0 `@!RFC6749` protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
 Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.
 
@@ -50,7 +50,7 @@ This specification defines how the OpenID Connect protocol can be extended so th
 
 ## Requirements Notation and Conventions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OpenID ProviderTIONAL" in this document are to be interpreted as described in RFC 2119 `@!RFC2119`.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 `@!RFC2119`.
 
 In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.
 
@@ -93,7 +93,7 @@ These steps are illustrated in the following diagram:
 +--------+                                   +----------+
 ```
 
-# Credential Request 
+# Credential Request
 
 A credential request is an OpenID Connect authentication request that requests that the End-User be authenticated by the Authorization Server and a credential containing the requested claims about the End-User be issued to the Client.
 
@@ -123,9 +123,9 @@ Where the decoded payload of the request parameter is as follows
   "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
-  "claims": 
-	{ 
-    "credential": { 
+  "claims":
+  {
+    "credential": {
       "given_name": {"essential": true},
       "last_name": {"essential": true},
       "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
@@ -154,7 +154,7 @@ sub
 
 Usage of the `request` parameter as defined in section [5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) of OpenID Connect core is REQUIRED in a credential request.
 
-The value of the `request` parameter MUST either be a valid JWT or JWE whose claims are the credential request parameters.
+The value of the `request` parameter MUST either be a valid [JWT](https://tools.ietf.org/html/rfc7519) or [JWE](https://tools.ietf.org/html/rfc7516) whose claims are the credential request parameters.
 
 Unsigned plaintext Request Objects, containing `none` in the `alg` value of the JOSE header MUST not be supported.
 
@@ -183,14 +183,14 @@ A non-normative example of a payload of a signed Request Object.
   "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "aud": "https://issuer.example.com",
   "response_type": "code",
-  "Client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub": "did:example:123456",
   "redirect_uri": "https://Client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
   "max_age": 86400,
-  "claims": 
-	{ 
-    "credential": { 
+  "claims":
+  {
+    "credential": {
       "given_name": {"essential": true},
       "last_name": {"essential": true},
       "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
@@ -205,7 +205,7 @@ A non-normative example of a payload of a signed Request Object.
 
 A Credential is a Client bound assertion describing the End-User authenticated in an OpenID flow. Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider should make the supported credential formats available at their openid-configuration meta-data endpoint.
 
-The following is a non-normative example of a Credential issued as a `@!W3C Verifiable Credential 1.0` compliant format in JSON-LD.
+The following is a non-normative example of a Credential issued as a [W3C Verifiable Credential 1.0](https://www.w3.org/TR/vc-data-model/) compliant format in JSON-LD.
 
 ```
 {
@@ -238,7 +238,7 @@ The following is a non-normative example of a Credential issued as a `@!W3C Veri
 
 ## Token Endpoint Response
 
-Successful and Error Authentication Response are in the same manor as OpenID Connect 1.0 [OpenID Connect Core 1.0] with the `code` parameter always being returned with the Authorization Code Flow.
+Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
 
 On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
 
@@ -248,13 +248,13 @@ The following is a non-normative example of a JSON-LD based Credential.
 
 ```
 {
-	"access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-	"token_type": "bearer",
-	"expires_in": 86400,
-	"id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-	"credential": {
-		"format": "w3cvc-jsonld",
-		"data": {
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "credential": {
+    "format": "w3cvc-jsonld",
+    "data": {
       "@context": [
         "https://www.w3.org/2018/credentials/v1",
         "https://www.w3.org/2018/credentials/examples/v1"
@@ -278,14 +278,13 @@ The following is a non-normative example of a JSON-LD based Credential.
         "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
       }
     }
-	}
+  }
 }
 ```
 
 # Credential Offer
 
 The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.
-
 
 The following is a non-normative example of a invocable URL pointing to a credential offer offered by the OpenID Provider `issuer.example.com`
 
@@ -295,7 +294,7 @@ openid://offer?https://issuer.example.com/.well-known/openid-configuration#/cred
 
 # OpenID Provider Metadata
 
-An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery].
+An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html).
 
 `credential_supported`
 : Boolean value indicating that the OpenID provider supports the credential issuance flow.
@@ -318,7 +317,7 @@ The following is a non-normative example of the relevant entries in the openid-c
   "credential_offers": [
     {
       "id": "7234f6dd-ec4f-4814-b30b-ab91187e8648",
-      "claims": [ 
+      "claims": [
         "given_name",
         "last_name",
         "https://www.w3.org/2018/credentials/examples/v1/degree"
