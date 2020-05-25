@@ -211,58 +211,6 @@ A non-normative example of a payload of a signed Request Object.
 }
 ```
 
-## Usage of Decentralized Identifiers
-
-[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential. 
-
-The below section highlights how a client construct a credential request to obtain a credential that is bound to the client via the usage of a [decentralized identifier](https://w3c.github.io/did-core/).
-
-## Credential Request using a Decentralized Identifier
-
-A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
-
-An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
-
-1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/)
-2. Resolve this the `did` value to a [did document]().
-3. Validate that the key in the `sub_jwk` field of the request appears in the `publicKey` section of the [DID Document]().
-
-If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_did`.
-
-A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
-
-The Client SHOULD also validate that the OpenID Provider supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
-
-The following is a non-normative example of requesting the issuance of a credential that uses a decentralized identifier.
-
-```
-{
-  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "aud": "https://issuer.example.com",
-  "response_type": "code",
-  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "did": "did:example:1234",
-  "redirect_uri": "https://Client.example.com/callback",
-  "credential_format": "w3cvc-jsonld",
-  "max_age": 86400,
-  "claims":
-  {
-    "credential": {
-      "given_name": {"essential": true},
-      "last_name": {"essential": true},
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
-    },
-  }
-}
-```
-
 # Credential Response
 
 ## Credential
@@ -404,4 +352,55 @@ The following is a non-normative example of the relevant entries in the openid-c
   ]
 }
 ```
+
+# Usage of Decentralized Identifiers
+
+[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential. 
+
+## Credential Request using a Decentralized Identifier
+
+A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
+
+An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
+
+1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/)
+2. Resolve this the `did` value to a [did document]().
+3. Validate that the key in the `sub_jwk` field of the request appears in the `publicKey` section of the [DID Document]().
+
+If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_did`.
+
+A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
+
+The Client SHOULD also validate that the OpenID Provider supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
+
+The following is a non-normative example of requesting the issuance of a credential that uses a decentralized identifier.
+
+```
+{
+  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "aud": "https://issuer.example.com",
+  "response_type": "code",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
+  "did": "did:example:1234",
+  "redirect_uri": "https://Client.example.com/callback",
+  "credential_format": "w3cvc-jsonld",
+  "max_age": 86400,
+  "claims":
+  {
+    "credential": {
+      "given_name": {"essential": true},
+      "last_name": {"essential": true},
+      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
+    },
+  }
+}
+```
+
 

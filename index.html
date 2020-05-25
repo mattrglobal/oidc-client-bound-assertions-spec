@@ -1150,12 +1150,6 @@ tr:nth-child(2n+1) > td {
 <li class="toc ulEmpty" id="section-toc.1-1.2.2.5">
                 <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="xref">2.5</a>.  <a href="#name-requesting-a-credential-usi" class="xref">Requesting a credential using the credential request parameter</a><a href="#section-toc.1-1.2.2.5.1" class="pilcrow">¶</a></p>
 </li>
-<li class="toc ulEmpty" id="section-toc.1-1.2.2.6">
-                <p id="section-toc.1-1.2.2.6.1"><a href="#section-2.6" class="xref">2.6</a>.  <a href="#name-usage-of-decentralized-iden" class="xref">Usage of Decentralized Identifiers</a><a href="#section-toc.1-1.2.2.6.1" class="pilcrow">¶</a></p>
-</li>
-<li class="toc ulEmpty" id="section-toc.1-1.2.2.7">
-                <p id="section-toc.1-1.2.2.7.1"><a href="#section-2.7" class="xref">2.7</a>.  <a href="#name-credential-request-using-a-" class="xref">Credential Request using a Decentralized Identifier</a><a href="#section-toc.1-1.2.2.7.1" class="pilcrow">¶</a></p>
-</li>
 </ul>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.3">
@@ -1174,6 +1168,14 @@ tr:nth-child(2n+1) > td {
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-openid-provider-metadata" class="xref">OpenID Provider Metadata</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-usage-of-decentralized-iden" class="xref">Usage of Decentralized Identifiers</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-credential-request-using-a-" class="xref">Credential Request using a Decentralized Identifier</a><a href="#section-toc.1-1.6.2.1.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
 </li>
 </ul>
 </nav>
@@ -1389,67 +1391,6 @@ tr:nth-child(2n+1) > td {
 </div>
 </section>
 </div>
-<div id="usage-of-decentralized-identifiers">
-<section id="section-2.6">
-        <h3 id="name-usage-of-decentralized-iden">
-<a href="#section-2.6" class="section-number selfRef">2.6. </a><a href="#name-usage-of-decentralized-iden" class="section-name selfRef">Usage of Decentralized Identifiers</a>
-        </h3>
-<p id="section-2.6-1"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the <a href="https://w3c.github.io/did-core/#dfn-did-subjects">did subject</a> including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
-<p id="section-2.6-2">The below section highlights how a client construct a credential request to obtain a credential that is bound to the client via the usage of a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.6-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="credential-request-using-a-decentralized-identifier">
-<section id="section-2.7">
-        <h3 id="name-credential-request-using-a-">
-<a href="#section-2.7" class="section-number selfRef">2.7. </a><a href="#name-credential-request-using-a-" class="section-name selfRef">Credential Request using a Decentralized Identifier</a>
-        </h3>
-<p id="section-2.7-1">A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> by using the <code>did</code> field.<a href="#section-2.7-1" class="pilcrow">¶</a></p>
-<p id="section-2.7-2">An OpenID Provider processing a credential request featuring a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> MUST follow the following additional steps to validate the request.<a href="#section-2.7-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-2.7-3">
-          <li id="section-2.7-3.1">
-            <p id="section-2.7-3.1.1">Validate the value in the <code>did</code> field is a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a><a href="#section-2.7-3.1.1" class="pilcrow">¶</a></p>
-</li>
-<li id="section-2.7-3.2">
-            <p id="section-2.7-3.2.1">Resolve this the <code>did</code> value to a [did document]().<a href="#section-2.7-3.2.1" class="pilcrow">¶</a></p>
-</li>
-<li id="section-2.7-3.3">
-            <p id="section-2.7-3.3.1">Validate that the key in the <code>sub_jwk</code> field of the request appears in the <code>publicKey</code> section of the [DID Document]().<a href="#section-2.7-3.3.1" class="pilcrow">¶</a></p>
-</li>
-</ol>
-<p id="section-2.7-4">If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthError">section 3.1.2.6.</a> with Error code: <code>invalid_did</code>.<a href="#section-2.7-4" class="pilcrow">¶</a></p>
-<p id="section-2.7-5">A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of <code>dids_supported</code> has a value of <code>true</code>.<a href="#section-2.7-5" class="pilcrow">¶</a></p>
-<p id="section-2.7-6">The Client SHOULD also validate that the OpenID Provider supports the <a href="https://w3c-ccg.github.io/did-method-registry/">did method</a> to be used in the request by retrieving their openid-configuration metadata to check if an attribute of <code>did_methods_supported</code> contains the required did method.<a href="#section-2.7-6" class="pilcrow">¶</a></p>
-<p id="section-2.7-7">The following is a non-normative example of requesting the issuance of a credential that uses a decentralized identifier.<a href="#section-2.7-7" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.7-8">
-<pre>{
-  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "aud": "https://issuer.example.com",
-  "response_type": "code",
-  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "did": "did:example:1234",
-  "redirect_uri": "https://Client.example.com/callback",
-  "credential_format": "w3cvc-jsonld",
-  "max_age": 86400,
-  "claims":
-  {
-    "credential": {
-      "given_name": {"essential": true},
-      "last_name": {"essential": true},
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
-    },
-  }
-}
-</pre><a href="#section-2.7-8" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
 </section>
 </div>
 <div id="credential-response">
@@ -1612,6 +1553,66 @@ tr:nth-child(2n+1) > td {
   ]
 }
 </pre><a href="#section-5-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="usage-of-decentralized-identifiers">
+<section id="section-6">
+      <h2 id="name-usage-of-decentralized-iden">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-usage-of-decentralized-iden" class="section-name selfRef">Usage of Decentralized Identifiers</a>
+      </h2>
+<p id="section-6-1"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the <a href="https://w3c.github.io/did-core/#dfn-did-subjects">did subject</a> including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div id="credential-request-using-a-decentralized-identifier">
+<section id="section-6.1">
+        <h3 id="name-credential-request-using-a-">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-credential-request-using-a-" class="section-name selfRef">Credential Request using a Decentralized Identifier</a>
+        </h3>
+<p id="section-6.1-1">A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> by using the <code>did</code> field.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">An OpenID Provider processing a credential request featuring a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> MUST follow the following additional steps to validate the request.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.1-3">
+          <li id="section-6.1-3.1">
+            <p id="section-6.1-3.1.1">Validate the value in the <code>did</code> field is a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a><a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-6.1-3.2">
+            <p id="section-6.1-3.2.1">Resolve this the <code>did</code> value to a [did document]().<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-6.1-3.3">
+            <p id="section-6.1-3.3.1">Validate that the key in the <code>sub_jwk</code> field of the request appears in the <code>publicKey</code> section of the [DID Document]().<a href="#section-6.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+<p id="section-6.1-4">If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthError">section 3.1.2.6.</a> with Error code: <code>invalid_did</code>.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of <code>dids_supported</code> has a value of <code>true</code>.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">The Client SHOULD also validate that the OpenID Provider supports the <a href="https://w3c-ccg.github.io/did-method-registry/">did method</a> to be used in the request by retrieving their openid-configuration metadata to check if an attribute of <code>did_methods_supported</code> contains the required did method.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-7">The following is a non-normative example of requesting the issuance of a credential that uses a decentralized identifier.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-6.1-8">
+<pre>{
+  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "aud": "https://issuer.example.com",
+  "response_type": "code",
+  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
+  "did": "did:example:1234",
+  "redirect_uri": "https://Client.example.com/callback",
+  "credential_format": "w3cvc-jsonld",
+  "max_age": 86400,
+  "claims":
+  {
+    "credential": {
+      "given_name": {"essential": true},
+      "last_name": {"essential": true},
+      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
+    },
+  }
+}
+</pre><a href="#section-6.1-8" class="pilcrow">¶</a>
+</div>
+</section>
 </div>
 </section>
 </div>
