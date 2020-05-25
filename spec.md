@@ -213,7 +213,7 @@ A non-normative example of a payload of a signed Request Object.
 
 ## Usage of Decentralized Identifiers
 
-[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject]() including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential. 
+[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential. 
 
 The below section highlights how a client construct a credential request to obtain a credential that is bound to the client via the usage of a [decentralized identifier](https://w3c.github.io/did-core/).
 
@@ -347,6 +347,8 @@ The following is a non-normative example of a JSON-LD based Credential.
 ```
 
 # Credential Offer
+
+**NOTE this section is still a W.I.P**
 
 The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.
 

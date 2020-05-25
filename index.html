@@ -1394,7 +1394,7 @@ tr:nth-child(2n+1) > td {
         <h3 id="name-usage-of-decentralized-iden">
 <a href="#section-2.6" class="section-number selfRef">2.6. </a><a href="#name-usage-of-decentralized-iden" class="section-name selfRef">Usage of Decentralized Identifiers</a>
         </h3>
-<p id="section-2.6-1"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the [did subject]() including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
+<p id="section-2.6-1"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the <a href="https://w3c.github.io/did-core/#dfn-did-subjects">did subject</a> including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
 <p id="section-2.6-2">The below section highlights how a client construct a credential request to obtain a credential that is bound to the client via the usage of a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1549,11 +1549,12 @@ tr:nth-child(2n+1) > td {
       <h2 id="name-credential-offer">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-credential-offer" class="section-name selfRef">Credential Offer</a>
       </h2>
-<p id="section-4-1">The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">The following is a non-normative example of a invocable URL pointing to a credential offer offered by the OpenID Provider <code>issuer.example.com</code><a href="#section-4-2" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4-3">
+<p id="section-4-1"><strong>NOTE this section is still a W.I.P</strong><a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">The following is a non-normative example of a invocable URL pointing to a credential offer offered by the OpenID Provider <code>issuer.example.com</code><a href="#section-4-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-4-4">
 <pre>openid://offer?https://issuer.example.com/.well-known/openid-configuration#/credential_offers[0]
-</pre><a href="#section-4-3" class="pilcrow">¶</a>
+</pre><a href="#section-4-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
