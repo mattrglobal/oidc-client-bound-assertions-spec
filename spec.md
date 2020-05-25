@@ -306,52 +306,6 @@ The following is a non-normative example of a invocable URL pointing to a creden
 openid://offer?https://issuer.example.com/.well-known/openid-configuration#/credential_offers[0]
 ```
 
-# OpenID Provider Metadata
-
-An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html).
-
-`credential_supported`
-: Boolean value indicating that the OpenID provider supports the credential issuance flow.
-
-`credential_formats_supported`
-: A JSON array of strings identifying the resulting format of the credential issued at the end of the flow.
-
-`credential_offers`
-: A JSON array of objects, each of which describing a group of related claims that can be referred to when interacting with the OpenID provider.
-
-`dids_supported`
-: Boolean value indicating that the OpenID provider supports the resolution of [decentralized identifiers](https://w3c.github.io/did-core/).
-
-`did_methods_supported`
-: A JSON array of strings representing [Decentralized Identifier Methods](https://w3c-ccg.github.io/did-method-registry/) that the OpenID provider supports resolution of
-
-The following is a non-normative example of the relevant entries in the openid-configuration meta data for an OpenID Provider supporting the credential issuance flow
-
-```
-{
-  "dids_supported": true,
-  "did_methods_supported": [
-    "ion",
-    "element",
-    "key"
-  ],
-  "credential_supported": true,
-  "credential_formats_supported": [
-    "w3cvc-jsonld",
-    "jwt"
-  ],
-  "credential_offers": [
-    {
-      "id": "7234f6dd-ec4f-4814-b30b-ab91187e8648",
-      "claims": [
-        "given_name",
-        "last_name",
-        "https://www.w3.org/2018/credentials/examples/v1/degree"
-      ]
-    }
-  ]
-}
-```
 
 # Usage of Decentralized Identifiers
 
@@ -403,4 +357,49 @@ The following is a non-normative example of requesting the issuance of a credent
 }
 ```
 
+# OpenID Provider Metadata
 
+An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html).
+
+`credential_supported`
+: Boolean value indicating that the OpenID provider supports the credential issuance flow.
+
+`credential_formats_supported`
+: A JSON array of strings identifying the resulting format of the credential issued at the end of the flow.
+
+`credential_offers`
+: A JSON array of objects, each of which describing a group of related claims that can be referred to when interacting with the OpenID provider.
+
+`dids_supported`
+: Boolean value indicating that the OpenID provider supports the resolution of [decentralized identifiers](https://w3c.github.io/did-core/).
+
+`did_methods_supported`
+: A JSON array of strings representing [Decentralized Identifier Methods](https://w3c-ccg.github.io/did-method-registry/) that the OpenID provider supports resolution of
+
+The following is a non-normative example of the relevant entries in the openid-configuration meta data for an OpenID Provider supporting the credential issuance flow
+
+```
+{
+  "dids_supported": true,
+  "did_methods_supported": [
+    "ion",
+    "element",
+    "key"
+  ],
+  "credential_supported": true,
+  "credential_formats_supported": [
+    "w3cvc-jsonld",
+    "jwt"
+  ],
+  "credential_offers": [
+    {
+      "id": "7234f6dd-ec4f-4814-b30b-ab91187e8648",
+      "claims": [
+        "given_name",
+        "last_name",
+        "https://www.w3.org/2018/credentials/examples/v1/degree"
+      ]
+    }
+  ]
+}
+```
