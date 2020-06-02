@@ -54,14 +54,14 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.
 
-All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.
+All uses of JSON Web Signature (JWS) [JWS](https://tools.ietf.org/html/rfc7515) and JSON Web Encryption (JWE) [JWE](https://tools.ietf.org/html/rfc7516) data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.
 
 ## Terminology {#Terminology}
 
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
 Credential
-: An assertion made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.
+: An assertion containing claims made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.
 
 Credential Request
 : An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.
@@ -248,6 +248,27 @@ The following is a non-normative example of a Credential issued as a [W3C Verifi
 }
 ```
 
+The following is a non-normative example of a Credential issued as a [JWT](https://tools.ietf.org/html/rfc7519)
+
+```
+ewogICJhbGciOiAiRVMyNTYiLAogICJ0eXAiOiAiSldUIgp9.ewogICJpc3MiOiAiaXNzdWVyIjogImh0dHBzOi8vaXNzdWVyLmVkdSIsCiAgInN1YiI6ICJkaWQ6ZXhhbXBsZToxMjM0NTYiLAogICJpYXQiOiAxNTkxMDY5MDU2LAogICJleHAiOiAxNTkxMDY5NTU2LAogICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9kZWdyZWUiOiB7CiAgICAgImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxL3R5cGUiOiAiQmFjaGVsb3JEZWdyZWUiLAogICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9uYW1lIjogIkJhY2hlbG9yIG9mIFNjaWVuY2UgYW5kIEFydHMiCiAgfQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+```
+
+And the decoded Claim Set of the JWT
+
+```
+{
+  "iss": "issuer": "https://issuer.edu",
+  "sub": "did:example:123456",
+  "iat": 1591069056,
+  "exp": 1591069556,
+  "https://www.w3.org/2018/credentials/examples/v1/degree": {
+     "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+     "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
+  }
+}
+```
+
 ## Token Endpoint Response
 
 Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
@@ -256,7 +277,7 @@ On Request to the Token Endpoint the `grant_type` value MUST be `authorization_c
 
 The Response from the Token Endpoint MUST include the Credential in the form of an object with value for `format` indicating the credentials format and `data` containing the Credential.
 
-The following is a non-normative example of a JSON-LD based Credential.
+The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.
 
 ```
 {
@@ -273,7 +294,7 @@ The following is a non-normative example of a JSON-LD based Credential.
       ],
       "id": "http://example.gov/credentials/3732",
       "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
+      "issuer": "https://issuer.edu",
       "issuanceDate": "2020-03-10T04:24:12.164Z",
       "credentialSubject": {
         "id": "did:example:123456",
@@ -285,11 +306,41 @@ The following is a non-normative example of a JSON-LD based Credential.
       "proof": {
         "type": "Ed25519Signature2018",
         "created": "2020-04-10T21:35:35Z",
-        "verificationMethod": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd#z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
+        "verificationMethod": "https://issuer.edu/keys/1",
         "proofPurpose": "assertionMethod",
         "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
       }
     }
+  }
+}
+```
+
+The following is a non-normative example of a response from the token endpoint featuring a JWT based credential
+
+```
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "credential": {
+    "format": "jwt",
+    "data": "ewogICJhbGciOiAiRVMyNTYiLAogICJ0eXAiOiAiSldUIgp9.ewogICJpc3MiOiAiaXNzdWVyIjogImh0dHBzOi8vaXNzdWVyLmVkdSIsCiAgInN1YiI6ICJkaWQ6ZXhhbXBsZToxMjM0NTYiLAogICJpYXQiOiAxNTkxMDY5MDU2LAogICJleHAiOiAxNTkxMDY5NTU2LAogICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9kZWdyZWUiOiB7CiAgICAgImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxL3R5cGUiOiAiQmFjaGVsb3JEZWdyZWUiLAogICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9uYW1lIjogIkJhY2hlbG9yIG9mIFNjaWVuY2UgYW5kIEFydHMiCiAgfQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+}
+```
+
+And the decoded Claim Set of the JWT
+
+```
+{
+  "iss": "issuer": "https://issuer.edu",
+  "sub": "did:example:123456",
+  "iat": 1591069056,
+  "exp": 1591069556,
+  "https://www.w3.org/2018/credentials/examples/v1/degree": {
+     "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+     "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
   }
 }
 ```
@@ -318,8 +369,8 @@ A Client can request in the credential issuance flow, that the resulting credent
 An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
 
 1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/)
-2. Resolve this the `did` value to a [did document]().
-3. Validate that the key in the `sub_jwk` field of the request appears in the `publicKey` section of the [DID Document]().
+2. Resolve this the `did` value to a [did document](https://w3c.github.io/did-core/#dfn-did-documents).
+3. Validate that the key in the `sub_jwk` field of the request appears in the `publicKey` section of the [DID Document](https://w3c.github.io/did-core/#dfn-did-documents).
 
 If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_did`.
 
