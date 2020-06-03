@@ -1071,7 +1071,7 @@ tr:nth-child(2n+1) > td {
 <thead><tr>
 <td class="left"></td>
 <td class="center">Client Bound End-User Assertion</td>
-<td class="right">May 2020</td>
+<td class="right">June 2020</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Looker &amp; Thompson</td>
@@ -1088,7 +1088,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">client-bound-end-user-assertion</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-05-25" class="published">25 May 2020</time>
+<time datetime="2020-06-02" class="published">2 June 2020</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1196,7 +1196,7 @@ tr:nth-child(2n+1) > td {
         </h3>
 <p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 <code>@!RFC2119</code>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">In the .txt version of this document, values are quoted to indicate that they are to be taken literally. When using these values in protocol messages, the quotes MUST NOT be used as part of the value. In the HTML version of this document, values to be taken literally are indicated by the use of this fixed-width font.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
-<p id="section-1.1-3">All uses of JSON Web Signature (JWS) [JWS] and JSON Web Encryption (JWE) [JWE] data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">All uses of JSON Web Signature (JWS) <a href="https://tools.ietf.org/html/rfc7515">JWS</a> and JSON Web Encryption (JWE) <a href="https://tools.ietf.org/html/rfc7516">JWE</a> data structures in this specification utilize the JWS Compact Serialization or the JWE Compact Serialization; the JWS JSON Serialization and the JWE JSON Serialization are not used.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="Terminology">
@@ -1208,7 +1208,7 @@ tr:nth-child(2n+1) > td {
 <dl class="dlParallel" id="section-1.2-2">
           <dt id="section-1.2-2.1">Credential</dt>
 <dd id="section-1.2-2.2">
-            <p id="section-1.2-2.2.1">An assertion made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.2.1">An assertion containing claims made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-1.2-2.3">Credential Request</dt>
 <dd id="section-1.2-2.4">
@@ -1434,6 +1434,25 @@ tr:nth-child(2n+1) > td {
 }
 </pre><a href="#section-3.1-3" class="pilcrow">¶</a>
 </div>
+<p id="section-3.1-4">The following is a non-normative example of a Credential issued as a <a href="https://tools.ietf.org/html/rfc7519">JWT</a><a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.1-5">
+<pre>ewogICJhbGciOiAiRVMyNTYiLAogICJ0eXAiOiAiSldUIgp9.ewogICJpc3MiOiAiaXNzdWVyIjogImh0dHBzOi8vaXNzdWVyLmVkdSIsCiAgInN1YiI6ICJkaWQ6ZXhhbXBsZToxMjM0NTYiLAogICJpYXQiOiAxNTkxMDY5MDU2LAogICJleHAiOiAxNTkxMDY5NTU2LAogICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9kZWdyZWUiOiB7CiAgICAgImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxL3R5cGUiOiAiQmFjaGVsb3JEZWdyZWUiLAogICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9uYW1lIjogIkJhY2hlbG9yIG9mIFNjaWVuY2UgYW5kIEFydHMiCiAgfQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+</pre><a href="#section-3.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-6">And the decoded Claim Set of the JWT<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.1-7">
+<pre>{
+  "iss": "issuer": "https://issuer.edu",
+  "sub": "did:example:123456",
+  "iat": 1591069056,
+  "exp": 1591069556,
+  "https://www.w3.org/2018/credentials/examples/v1/degree": {
+     "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+     "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
+  }
+}
+</pre><a href="#section-3.1-7" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="token-endpoint-response">
@@ -1444,7 +1463,7 @@ tr:nth-child(2n+1) > td {
 <p id="section-3.2-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">The following is a non-normative example of a JSON-LD based Credential.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3.2-5">
 <pre>{
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
@@ -1460,7 +1479,7 @@ tr:nth-child(2n+1) > td {
       ],
       "id": "http://example.gov/credentials/3732",
       "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
+      "issuer": "https://issuer.edu",
       "issuanceDate": "2020-03-10T04:24:12.164Z",
       "credentialSubject": {
         "id": "did:example:123456",
@@ -1472,7 +1491,7 @@ tr:nth-child(2n+1) > td {
       "proof": {
         "type": "Ed25519Signature2018",
         "created": "2020-04-10T21:35:35Z",
-        "verificationMethod": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd#z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
+        "verificationMethod": "https://issuer.edu/keys/1",
         "proofPurpose": "assertionMethod",
         "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
       }
@@ -1480,6 +1499,34 @@ tr:nth-child(2n+1) > td {
   }
 }
 </pre><a href="#section-3.2-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-6">The following is a non-normative example of a response from the token endpoint featuring a JWT based credential<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.2-7">
+<pre>{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "credential": {
+    "format": "jwt",
+    "data": "ewogICJhbGciOiAiRVMyNTYiLAogICJ0eXAiOiAiSldUIgp9.ewogICJpc3MiOiAiaXNzdWVyIjogImh0dHBzOi8vaXNzdWVyLmVkdSIsCiAgInN1YiI6ICJkaWQ6ZXhhbXBsZToxMjM0NTYiLAogICJpYXQiOiAxNTkxMDY5MDU2LAogICJleHAiOiAxNTkxMDY5NTU2LAogICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9kZWdyZWUiOiB7CiAgICAgImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxL3R5cGUiOiAiQmFjaGVsb3JEZWdyZWUiLAogICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy9leGFtcGxlcy92MS9uYW1lIjogIkJhY2hlbG9yIG9mIFNjaWVuY2UgYW5kIEFydHMiCiAgfQp9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+}
+</pre><a href="#section-3.2-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-8">And the decoded Claim Set of the JWT<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.2-9">
+<pre>{
+  "iss": "issuer": "https://issuer.edu",
+  "sub": "did:example:123456",
+  "iat": 1591069056,
+  "exp": 1591069556,
+  "https://www.w3.org/2018/credentials/examples/v1/degree": {
+     "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+     "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
+  }
+}
+</pre><a href="#section-3.2-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1517,10 +1564,10 @@ tr:nth-child(2n+1) > td {
             <p id="section-5.1-3.1.1">Validate the value in the <code>did</code> field is a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a><a href="#section-5.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-5.1-3.2">
-            <p id="section-5.1-3.2.1">Resolve this the <code>did</code> value to a [did document]().<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-3.2.1">Resolve this the <code>did</code> value to a <a href="https://w3c.github.io/did-core/#dfn-did-documents">did document</a>.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-5.1-3.3">
-            <p id="section-5.1-3.3.1">Validate that the key in the <code>sub_jwk</code> field of the request appears in the <code>publicKey</code> section of the [DID Document]().<a href="#section-5.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-3.3.1">Validate that the key in the <code>sub_jwk</code> field of the request appears in the <code>publicKey</code> section of the <a href="https://w3c.github.io/did-core/#dfn-did-documents">DID Document</a>.<a href="#section-5.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
 </ol>
 <p id="section-5.1-4">If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthError">section 3.1.2.6.</a> with Error code: <code>invalid_did</code>.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
