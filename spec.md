@@ -101,7 +101,7 @@ The following section outlines how an [OpenID Connect Authentication Request](ht
 
 ## Example
 
-The credential request follows [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) including the required, but modified usage of the `request` parameter.
+The credential request follows [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) including the required, but modified usage of the `request` parameter. The syntax around requesting claims to feature in the resulting credential is defined in [Section 5.5 of OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) with the addition of the new top level member of `credential`.
 
 A non-normative example of the Authorization request.
 
