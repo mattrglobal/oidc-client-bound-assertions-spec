@@ -230,7 +230,14 @@ The following is a non-normative example of a Credential issued as a [W3C Verifi
   "issuer": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
   "issuanceDate": "2020-03-10T04:24:12.164Z",
   "credentialSubject": {
-    "id": "did:example:123456",
+    "id": "123456789",
+    "jwk": {
+      "crv":"secp256k1",
+      "kid":"YkDpvGNsch2lFBf6p8u3",
+      "kty":"EC",
+      "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+      "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+    },
     "givenName": "John",
     "familyName": "Doe",
     "degree": {
@@ -259,7 +266,14 @@ And the decoded Claim Set of the JWT
 ```
 {
   "iss": "issuer": "https://issuer.edu",
-  "sub": "did:example:123456",
+  "sub": "123456789",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
   "iat": 1591069056,
   "exp": 1591069556,
   "https://www.w3.org/2018/credentials/examples/v1/degree": {
@@ -297,7 +311,14 @@ The following is a non-normative example of a response from the token endpoint f
       "issuer": "https://issuer.edu",
       "issuanceDate": "2020-03-10T04:24:12.164Z",
       "credentialSubject": {
-        "id": "did:example:123456",
+        "id": "123456789",
+        "publicKey": {
+          "crv":"secp256k1",
+          "kid":"YkDpvGNsch2lFBf6p8u3",
+          "kty":"EC",
+          "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+          "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+        },
         "degree": {
           "type": "BachelorDegree",
           "name": "Bachelor of Science and Arts"
@@ -335,7 +356,14 @@ And the decoded Claim Set of the JWT
 ```
 {
   "iss": "issuer": "https://issuer.edu",
-  "sub": "did:example:123456",
+  "sub": "123456789",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
   "iat": 1591069056,
   "exp": 1591069556,
   "https://www.w3.org/2018/credentials/examples/v1/degree": {
@@ -408,6 +436,45 @@ The following is a non-normative example of requesting the issuance of a credent
 }
 ```
 
+The following is a non-normative example of a token endpoint response for the request shown above.
+
+
+```
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "credential": {
+    "format": "w3cvc-jsonld",
+    "data": {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.w3.org/2018/credentials/examples/v1"
+      ],
+      "id": "http://example.gov/credentials/3732",
+      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+      "issuer": "https://issuer.edu",
+      "issuanceDate": "2020-03-10T04:24:12.164Z",
+      "credentialSubject": {
+        "id": "did:example:1234",
+        "degree": {
+          "type": "BachelorDegree",
+          "name": "Bachelor of Science and Arts"
+        }
+      },
+      "proof": {
+        "type": "Ed25519Signature2018",
+        "created": "2020-04-10T21:35:35Z",
+        "verificationMethod": "https://issuer.edu/keys/1",
+        "proofPurpose": "assertionMethod",
+        "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
+      }
+    }
+  }
+}
+```
+
 # OpenID Provider Metadata
 
 An OpenID provider can use the following meta-data elements to advertise its support for credential issuance in its openid-configuration defined by [OpenID-Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html).
@@ -425,7 +492,7 @@ An OpenID provider can use the following meta-data elements to advertise its sup
 : Boolean value indicating that the OpenID provider supports the resolution of [decentralized identifiers](https://w3c.github.io/did-core/).
 
 `did_methods_supported`
-: A JSON array of strings representing [Decentralized Identifier Methods](https://w3c-ccg.github.io/did-method-registry/) that the OpenID provider supports resolution of
+: A JSON array of strings representing [Decentralized Identifier Methods](https://w3c-ccg.github.io/did-method-registry/) that the OpenID provider supports resolution of.
 
 The following is a non-normative example of the relevant entries in the openid-configuration meta data for an OpenID Provider supporting the credential issuance flow
 
