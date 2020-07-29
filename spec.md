@@ -8,7 +8,7 @@ keyword = [""]
 
 [seriesInfo]
 name = "Individual-Draft"
-value = "client-bound-end-user-assertion"
+value = "client-bound-end-user-assertion-01"
 status = "informational"
 
 [[author]]
