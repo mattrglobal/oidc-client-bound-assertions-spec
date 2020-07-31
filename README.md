@@ -1,8 +1,8 @@
-# OpenID Client Bound End-User Assertion
+# OpenID Connect Credential Provider
 
 [Latest Draft](https://mattrglobal.github.io/oidc-client-bound-assertions-spec/)
 
-This repository is the home to the draft specification to extend OpenID Connect to support client bound end-user assertions that enable new approaches around federated sharing of identity information.
+This repository is the home to the draft specification to extend an OpenID Connect Provider to support the issuance of credentials which in turn enable new approaches around federated sharing of identity information.
 
 ## Contributing
 
