@@ -115,8 +115,6 @@ Where the decoded payload of the request parameter is as follows
 
 ```
 {
-  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "aud": "https://issuer.example.com",
   "response_type": "code",
   "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub_jwk" : {
@@ -128,7 +126,6 @@ Where the decoded payload of the request parameter is as follows
   },
   "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
-  "max_age": 86400,
   "claims":
   {
     "credential": {
@@ -160,7 +157,7 @@ did
 
 ## Request Parameter
 
-Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a credential request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the modified usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
+Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a credential request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
 
 Usage of the `request` parameter as defined in section [5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) of OpenID Connect core is REQUIRED in a credential request.
 
@@ -186,8 +183,6 @@ A non-normative example of a payload of a signed Request Object.
 
 ```
 {
-  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "aud": "https://issuer.example.com",
   "response_type": "code",
   "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub_jwk" : {
@@ -199,7 +194,6 @@ A non-normative example of a payload of a signed Request Object.
   },
   "redirect_uri": "https://client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
-  "max_age": 86400,
   "claims":
   {
     "credential": {
@@ -373,18 +367,6 @@ And the decoded Claim Set of the JWT
 }
 ```
 
-# Credential Offer
-
-**NOTE this section is still a W.I.P**
-
-The openid-configuration for an OpenID provider is used to communicate to Clients what capabilities the provider supports, including whether or not it supports the credential issuance flow. Sometime it is desirable to be able to embedded a link to an offer that is invocable by supported Clients.
-
-The following is a non-normative example of a invocable URL pointing to a credential offer offered by the OpenID Provider `issuer.example.com`
-
-```
-openid://offer?https://issuer.example.com/.well-known/openid-configuration#/credential_offers[0]
-```
-
 
 # Usage of Decentralized Identifiers
 
@@ -394,24 +376,22 @@ openid://offer?https://issuer.example.com/.well-known/openid-configuration#/cred
 
 A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
 
-An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
-
-1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/)
-2. Resolve this the `did` value to a [did document](https://w3c.github.io/did-core/#dfn-did-documents).
-3. Validate that the key in the `sub_jwk` field of the request appears in the `publicKey` section of the [DID Document](https://w3c.github.io/did-core/#dfn-did-documents).
-
-If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_did`.
-
 A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
 
 The Client SHOULD also validate that the OpenID Provider supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
+
+An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
+
+1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/).
+2. Resolve this the `did` value to a [did document](https://w3c.github.io/did-core/#dfn-did-documents).
+3. Validate that the key in the `sub_jwk` field of the request is referenced in the [authentication](https://w3c.github.io/did-core/#authentication) section of the [DID Document](https://w3c.github.io/did-core/#dfn-did-documents).
+
+If any of the steps fail then the OpenID Provider MUST respond to the request with the Error Response parameter, [section 3.1.2.6.](https://openid.net/specs/openid-connect-core-1_0.html#AuthError) with Error code: `invalid_did`.
 
 The following is a non-normative example of requesting the issuance of a credential that uses a decentralized identifier.
 
 ```
 {
-  "iss": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "aud": "https://issuer.example.com",
   "response_type": "code",
   "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
   "sub_jwk" : {
@@ -424,7 +404,6 @@ The following is a non-normative example of requesting the issuance of a credent
   "did": "did:example:1234",
   "redirect_uri": "https://Client.example.com/callback",
   "credential_format": "w3cvc-jsonld",
-  "max_age": 86400,
   "claims":
   {
     "credential": {
@@ -437,7 +416,6 @@ The following is a non-normative example of requesting the issuance of a credent
 ```
 
 The following is a non-normative example of a token endpoint response for the request shown above.
-
 
 ```
 {
@@ -485,8 +463,11 @@ An OpenID provider can use the following meta-data elements to advertise its sup
 `credential_formats_supported`
 : A JSON array of strings identifying the resulting format of the credential issued at the end of the flow.
 
-`credential_offers`
-: A JSON array of objects, each of which describing a group of related claims that can be referred to when interacting with the OpenID provider.
+`credential_claims_supported`
+: A JSON array of strings identifying the claim names supported within an issued credential. 
+
+`credential_name`
+: A human readable string to identify the name of the credential offered by the provider. 
 
 `dids_supported`
 : Boolean value indicating that the OpenID provider supports the resolution of [decentralized identifiers](https://w3c.github.io/did-core/).
@@ -500,24 +481,37 @@ The following is a non-normative example of the relevant entries in the openid-c
 {
   "dids_supported": true,
   "did_methods_supported": [
-    "ion",
-    "element",
-    "key"
+    "did:ion:",
+    "did:elem:",
+    "did:sov:"
   ],
   "credential_supported": true,
   "credential_formats_supported": [
     "w3cvc-jsonld",
     "jwt"
   ],
-  "credential_offers": [
-    {
-      "id": "7234f6dd-ec4f-4814-b30b-ab91187e8648",
-      "claims": [
-        "given_name",
-        "last_name",
-        "https://www.w3.org/2018/credentials/examples/v1/degree"
-      ]
-    }
-  ]
+  "credential_claims_supported": [
+    "given_name",
+    "last_name",
+    "https://www.w3.org/2018/credentials/examples/v1/degree"
+  ],
+  "credential_name": "University Credential" 
 }
+```
+
+## URL Construction
+
+In certain instances it is advantageous to be able to construct a URL which points at an OpenID Connect provider, of which is invocable by a supporting OpenID Connect client.
+
+The URL SHOULD use the scheme `openid` to allow supporting clients to register intent to handle the URL.
+
+The URL SHOULD feature the term `discovery` in the host portion of the URL identifying the intent of the URL is to communicate discovery related information.
+
+The URL SHOULD feature a query parameter with key `issuer` who's value corresponds to a valid issuer identifier as defined in [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html). This identifier MUST be a url of the scheme `https://` of which when concatenated with the string `/.well-known/openid-configuration` and dereferenced by an HTTP GET request
+results in the retrieval of the providers OpenID Connect Metadata.
+
+The following is a non-normative example of an invocable URL pointing to the OpenID Provider who has the issuer identifier of `https://issuer.example.com`
+
+```
+openid://discovery?issuer=https://issuer.example.com
 ```
