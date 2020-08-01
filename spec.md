@@ -1,6 +1,6 @@
 %%%
-title = "Client Bound End-User Assertion"
-abbrev = "Client Bound End-User Assertion"
+title = "OpenID Connect Credential Provider"
+abbrev = "OpenID Connect Credential Provider"
 ipr = "none"
 workgroup = "none"
 keyword = [""]
@@ -8,7 +8,7 @@ keyword = [""]
 
 [seriesInfo]
 name = "Individual-Draft"
-value = "client-bound-end-user-assertion-01"
+value = "openid-credential-provider-01"
 status = "informational"
 
 [[author]]
@@ -32,21 +32,23 @@ email = "john.thompson@mattr.global"
 
 .# Abstract
 
-OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
+OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.
+In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as the [NASCAR problem](https://indieweb.org/NASCAR_problem) and [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.
+This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials.
 
 {mainmatter}
 
 # Introduction {#Introduction}
 
-OpenID Connect 1.0 [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer on top of the OAuth 2.0 `@!RFC6749` protocol. It enables Clients to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
+OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Because of this limitation, OpenID Connect is constrained to an architecture where relying parties must be in direct contact with the issuers/authorities of obtained user assertions in order to trust their presentations.
+In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as the [NASCAR problem](https://indieweb.org/NASCAR_problem) and [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how the OpenID Connect protocol can be extended so that a Client can obtain an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the obtained assertion to other relying parties whilst authenticating the established binding to the assertion.
+Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Therefore using this user assertion as a credential is impractical in many instances from a security perspective. Instead what is required for a user assertion to be suitable as a credential, is for it to feature some form of binding to the Client that requested it.
+
+This specification defines how the OpenID Connect protocol can be extended so that a supporting Client can obtain a credential on-behalf of an End-User. Where a credential is defined as an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the credential to other relying parties whilst authenticating the established binding to the assertion.
 
 ## Requirements Notation and Conventions
 
@@ -70,7 +72,7 @@ Credential Request
 
 This specification extends the OpenID Connect protocol for the purposes of credential issuance.
 
-1. The Client sends a credential request to the OpenID Provider (OpenID Provider).
+1. The Client sends a credential request to the OpenID Provider (OP).
 2. The OpenID Provider authenticates the End-User and obtains authorization.
 3. The OpenID Provider responds with a Credential.
 
@@ -92,6 +94,27 @@ These steps are illustrated in the following diagram:
 |        |                                   |          |
 +--------+                                   +----------+
 ```
+
+**Note** - Outside of the scope for this specification is how the client then exercises presentation of this credential with a relying party, however the overall diagram looks like the following.
+
+```
++---------+                             +--------+                                   +----------+
+|         |--(1) Presentation Request-->|        |                                   |          |
+|         |                             |        |------(2) Credential Request------>|          |
+|         |                             |        |                                   |          |
+|         |                             |        |  +--------+                       |          |
+|         |                             |        |  |        |                       |          |
+| Relying |                             | Client |  |  End-  |<--(3) AuthN & AuthZ-->|    OP    |
+|  Party  |                             |        |  |  User  |                       |          |
+|         |                             |        |  |        |                       |          |
+|         |                             |        |  +--------+                       |          |
+|         |                             |        |                                   |          |
+|         |                             |        |<-----(4) Credential Response------|          |
+|         |<-(5) Presentation Response--|        |                                   |          |
++---------+                             +--------+                                   +----------+
+```
+
+**Note** - Steps 2-4 (interaction between the client and OP) do not have to occur within the same transaction as steps 1 and 5 (interaction between the relying party and the client)
 
 # Credential Request
 

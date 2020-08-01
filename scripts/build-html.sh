@@ -5,4 +5,4 @@ docker run -v `pwd`:/data danielfett/markdown2rfc spec.md
 rm *.xml
 
 # Rename the HTML version for hosting with GH pages
-mv client-bound-end-user-assertion-*.html index.html
+mv openid-credential-provider-*.html index.html
