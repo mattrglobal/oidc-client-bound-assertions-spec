@@ -34,7 +34,7 @@ email = "john.thompson@mattr.global"
 
 OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as the [NASCAR problem](https://indieweb.org/NASCAR_problem) and [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
+In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
 This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials.
 
@@ -44,7 +44,7 @@ This specification defines how an OpenID provider can be extended beyond being t
 
 OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as the [NASCAR problem](https://indieweb.org/NASCAR_problem) and [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
+In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
 Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Therefore using this user assertion as a credential is impractical in many instances from a security perspective. Instead what is required for a user assertion to be suitable as a credential, is for it to feature some form of binding to the Client that requested it.
 
@@ -68,65 +68,91 @@ Credential
 Credential Request
 : An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.
 
+Holder
+: An entity that is tasked with holding credential(s) and presenting them to relying parties and the consent of and on behalf of the End-User (subject of the credential(s)). 
+
 ## Overview
 
 This specification extends the OpenID Connect protocol for the purposes of credential issuance.
 
-1. The Client sends a credential request to the OpenID Provider (OP).
-2. The OpenID Provider authenticates the End-User and obtains authorization.
-3. The OpenID Provider responds with a Credential.
+1. The Holder acting as an OpenID Client sends a Credential Request to the Credential Provider that is acting as an OpenID Provider (OP).
+2. The Credential Provider authenticates the End-User and obtains authorization.
+3. The Credential Provider responds with a Credential.
 
 These steps are illustrated in the following diagram:
 
 ```
 +--------+                                   +----------+
 |        |                                   |          |
-|        |------(1) Credential Request------>|          |
+|        |---(1)OpenID Credential Request--->|          |
 |        |                                   |          |
 |        |  +--------+                       |          |
 |        |  |        |                       |          |
-| Client |  |  End-  |<--(2) AuthN & AuthZ-->|    OP    |
-|        |  |  User  |                       |          |
-|        |  |        |                       |          |
+| Holder |  |  End-  |<--(2) AuthN & AuthZ-->|Credential|
+|(Client)|  |  User  |                       | Provider |
+|        |  |        |                       |   (OP)   |
 |        |  +--------+                       |          |
 |        |                                   |          |
-|        |<-----(3) Credential Response------|          |
+|        |<--(3)OpenID Credential Response---|          |
 |        |                                   |          |
 +--------+                                   +----------+
 ```
 
-**Note** - Outside of the scope for this specification is how the client then exercises presentation of this credential with a relying party, however the overall diagram looks like the following.
+**Note** - Outside of the scope for this specification is how the Holder then exercises presentation of this credential with a relying party, however the diagram looks like the following.
+
+1. The Relying Party acting as an OpenID Client sends an OpenID Request to the Holder that is acting an OpenID Provider (OP).
+2. The Holder authenticates the End-User and obtains authorization.
+3. The Holder responds with a Credential Presentation.
 
 ```
-+---------+                             +--------+                                   +----------+
-|         |--(1) Presentation Request-->|        |                                   |          |
-|         |                             |        |------(2) Credential Request------>|          |
-|         |                             |        |                                   |          |
-|         |                             |        |  +--------+                       |          |
-|         |                             |        |  |        |                       |          |
-| Relying |                             | Client |  |  End-  |<--(3) AuthN & AuthZ-->|    OP    |
-|  Party  |                             |        |  |  User  |                       |          |
-|         |                             |        |  |        |                       |          |
-|         |                             |        |  +--------+                       |          |
-|         |                             |        |                                   |          |
-|         |                             |        |<-----(4) Credential Response------|          |
-|         |<-(5) Presentation Response--|        |                                   |          |
-+---------+                             +--------+                                   +----------+
++----------+                                                           +----------+
+|          |                                                           |          |
+|          |---(1)OpenID Connect Credential Presentation Request------>|          |
+|          |                                                           |          |
+|          |                          +--------+                       |          |
+|          |                          |        |                       |          |
+| Relying  |                          |  End-  |<--(2) AuthN & AuthZ-->|  Holder  |
+|  Party   |                          |  User  |                       |   (OP)   |
+| (Client) |                          |        |                       |          |
+|          |                          +--------+                       |          |
+|          |                                                           |          |
+|          |<--(3)OpenID Connect Credential Presentation Response------|          |
+|          |                                                           |          |
++----------+                                                           +----------+
 ```
-
-**Note** - Steps 2-4 (interaction between the client and OP) do not have to occur within the same transaction as steps 1 and 5 (interaction between the relying party and the client)
 
 # Credential Request
 
-A credential request is an OpenID Connect authentication request that requests that the End-User be authenticated by the Authorization Server and a credential containing the requested claims about the End-User be issued to the Client.
+A Credential Request is an OpenID Connect authentication request made by a Holder that requests the End-User to be authenticated by the Credential Provider and consent be granted for a credential containing the requested claims about the End-User be issued to it.
 
-The following section outlines how an [OpenID Connect Authentication Request](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) must be extended in order for it to be a credential request.
+The following section outlines how an [OpenID Connect Authentication Request](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) is extended in order to become a valid Credential Request.
 
-## Example
+## Credential Request
 
-The credential request follows [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) including the required, but modified usage of the `request` parameter. The syntax around requesting claims to feature in the resulting credential is defined in [Section 5.5 of OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) with the addition of the new top level member of `credential`.
+The simplest OpenID Connect Credential Request is an ordinary OpenID Connect request that makes use of one additional scope, `openid_credential`.
 
-A non-normative example of the Authorization request.
+A non-normative example of the Credential Request.
+
+```
+HTTP/1.1 302 Found
+Location: https://server.example.com/authorize?
+  response_type=code
+  &scope=openid%20openid_credential
+  &client_id=s6BhdRkqt3
+  &state=af0ifjsldkj
+  &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+  &credential_format=w3cvc-jsonld
+```
+
+When a request of this nature is made, the `access_token` issued to the Client authorizes it to access the credential endpoint to obtain a credential.
+
+## Signed Credential Request
+
+When making a credential request, the Client can elect to sign the request, making use of the [signed request object](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
+
+The following example documents this variation.
+
+A non-normative example of a Signed Credential request.
 
 ```
 https://issuer.example.com/authorize
@@ -148,41 +174,13 @@ Where the decoded payload of the request parameter is as follows
     "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
   },
   "redirect_uri": "https://client.example.com/callback",
-  "credential_format": "w3cvc-jsonld",
-  "claims":
-  {
-    "credential": {
-      "given_name": {"essential": true},
-      "last_name": {"essential": true},
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
-    },
-  }
+  "credential_format": "w3cvc-jsonld"
 }
 ```
 
 Where the jwt was signed by the key referenced in the `sub_jwk` section of the request.
 
-## Request Parameters
-
-A credential request uses the OpenID and OAuth2.0 request parameters as outlined in section [3.1.2.1](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) of OpenID Connect core, except for the following additional constraints.
-
-scope
-: REQUIRED. A credential request MUST contain the `openid_credential` scope value in the second position directly after the `openid` scope.
-
-credential_format
-: REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the `credential_formats_supported` attribute.
-
-sub_jwk
-: REQUIRED. Defines the key material the client is requesting the credential to be bound to and the key responsible for signing the request object. Value is a JSON Object that is a valid [JWK](https://tools.ietf.org/html/rfc7517).
-
-did
-: OPTIONAL. Defines the relationship between the key material the client is requesting the credential to be bound to and a [decentralized identifier](https://w3c.github.io/did-core/). Processing of this value requires the OpenID Provider to support the resolution of [decentralized identifiers](https://w3c.github.io/did-core/) which is advertised in their openid-configuration metadata, under the `dids_supported` attribute. The value of this field MUST be a valid [decentralized identifier](https://w3c.github.io/did-core/).
-
-## Request Parameter
-
-Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a credential request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
-
-Usage of the `request` parameter as defined in section [5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) of OpenID Connect core is REQUIRED in a credential request.
+When a request of this nature is made, the resulting credential will be made available in the response body of the token endpoint.
 
 The value of the `request` parameter MUST either be a valid [JWT](https://tools.ietf.org/html/rfc7519) or [JWE](https://tools.ietf.org/html/rfc7516) whose claims are the credential request parameters, however the inner payload MUST be a valid [JWT](https://tools.ietf.org/html/rfc7519) signed by the Client who created the request.
 
@@ -194,45 +192,36 @@ If the Request Object signing validation fails or is missing, the OpenID Connect
 
 If the `did` value is present in the request and the OpenID Provider does not support the usage of [decentralized identifiers](https://w3c.github.io/did-core/) the value should be ignored.
 
+## Request Parameters
+
+A Credential Request uses the OpenID and OAuth2.0 request parameters as outlined in section [3.1.2.1](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) of OpenID Connect core, except for the following additional constraints.
+
+scope
+: REQUIRED. A Credential Request MUST contain the `openid_credential` scope value in the second position directly after the `openid` scope.
+
+credential_format
+: REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the `credential_formats_supported` attribute.
+
+sub_jwk
+: OPTIONAL. Used when making a Signed Credential Request, defines the key material the client is requesting the credential to be bound to and the key responsible for signing the request object. Value is a JSON Object that is a valid [JWK](https://tools.ietf.org/html/rfc7517).
+
+did
+: OPTIONAL. Defines the relationship between the key material the client is requesting the credential to be bound to and a [decentralized identifier](https://w3c.github.io/did-core/). Processing of this value requires the OpenID Provider to support the resolution of [decentralized identifiers](https://w3c.github.io/did-core/) which is advertised in their openid-configuration metadata, under the `dids_supported` attribute. The value of this field MUST be a valid [decentralized identifier](https://w3c.github.io/did-core/).
+
+Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a Credential Request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
+
+
 ## Response Types
 
-It is RECOMMENDED that a credential request flow use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps) as defined in OpenID Connect core.
+It is RECOMMENDED that a Credential Request flow use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps) as defined in OpenID Connect core.
 
 For instances where [implicit flow](https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth) is used, the `response_type` of `credential` SHOULD be used.
-
-## Requesting a credential using the credential request parameter
-
-A non-normative example of a payload of a signed Request Object.
-
-```
-{
-  "response_type": "code",
-  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "redirect_uri": "https://client.example.com/callback",
-  "credential_format": "w3cvc-jsonld",
-  "claims":
-  {
-    "credential": {
-      "given_name": {"essential": true},
-      "last_name": {"essential": true},
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
-    },
-  }
-}
-```
 
 # Credential Response
 
 ## Credential
 
-A Credential is a Client bound assertion describing the End-User authenticated in an OpenID flow. Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider SHOULD make the supported credential formats available at their openid-configuration meta-data endpoint.
+Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider SHOULD make the supported credential formats available at their openid-configuration meta-data endpoint.
 
 The following is a non-normative example of a Credential issued as a [W3C Verifiable Credential 1.0](https://www.w3.org/TR/vc-data-model/) compliant format in JSON-LD.
 
@@ -300,13 +289,18 @@ And the decoded Claim Set of the JWT
 }
 ```
 
-## Token Endpoint Response
+## Credential Endpoint
+
+TODO
+
+
+## Token Endpoint Response (with credential)
+
+If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for `format` indicating the credentials format and `data` containing the Credential.
 
 Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
 
 On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
-
-The Response from the Token Endpoint MUST include the Credential in the form of an object with value for `format` indicating the credentials format and `data` containing the Credential.
 
 The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.
 
@@ -393,17 +387,17 @@ And the decoded Claim Set of the JWT
 
 # Usage of Decentralized Identifiers
 
-[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential. 
+[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential, rather than using a public key directly. 
 
-## Credential Request using a Decentralized Identifier
+## Signed Credential Request using a Decentralized Identifier
 
-A Client can request in the credential issuance flow, that the resulting credential be bound to the client through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
+A Holder submitting a signed Credential Request can request, that the resulting credential be bound to the Holder through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
 
-A Client prior to submitting a credential request SHOULD validate that the OpenID Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
+A Holder prior to submitting a credential request SHOULD validate that the Credential Provider supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
 
-The Client SHOULD also validate that the OpenID Provider supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
+The Holder SHOULD also validate that the Credential Provider supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
 
-An OpenID Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
+A Credential Provider processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
 
 1. Validate the value in the `did` field is a valid [decentralized identifier](https://w3c.github.io/did-core/).
 2. Resolve this the `did` value to a [did document](https://w3c.github.io/did-core/#dfn-did-documents).
@@ -426,15 +420,8 @@ The following is a non-normative example of requesting the issuance of a credent
   },
   "did": "did:example:1234",
   "redirect_uri": "https://Client.example.com/callback",
-  "credential_format": "w3cvc-jsonld",
-  "claims":
-  {
-    "credential": {
-      "given_name": {"essential": true},
-      "last_name": {"essential": true},
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {"essential": true}
-    },
-  }
+  "credential_format": "w3cvc-jsonld"                                
+
 }
 ```
 
