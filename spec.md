@@ -46,8 +46,6 @@ OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. 
 
 In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-Typically the format of the assertion obtained about the End-User in the OpenID Connect protocol, known as the `id_token` or user assertion, is said to be bearer in nature, meaning it features no authenticatable binding to the Client that requested it. Therefore using this user assertion as a credential is impractical in many instances from a security perspective. Instead what is required for a user assertion to be suitable as a credential, is for it to feature some form of binding to the Client that requested it.
-
 This specification defines how the OpenID Connect protocol can be extended so that a supporting Client can obtain a credential on-behalf of an End-User. Where a credential is defined as an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the credential to other relying parties whilst authenticating the established binding to the assertion.
 
 ## Requirements Notation and Conventions
