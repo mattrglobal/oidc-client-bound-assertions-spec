@@ -61,13 +61,13 @@ All uses of JSON Web Signature (JWS) [JWS](https://tools.ietf.org/html/rfc7515) 
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
 Credential
-: An assertion containing claims made about an End-User that has been bound in an authenticatable manner through the use of public/private key pairs to the requesting Client.
+: An assertion containing claims made about an End-User that has been bound in a provable manner through the use of public/private key pairs to the requesting Client.
 
 Credential Request
 : An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.
 
 Holder
-: An entity that is tasked with holding credential(s) and presenting them to relying parties and the consent of and on behalf of the End-User (subject of the credential(s)). 
+: An entity that is tasked with holding credential(s) and presenting them to relying parties on behalf of the consenting End-User (subject of the credential(s)). 
 
 ## Overview
 
