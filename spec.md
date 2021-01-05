@@ -293,7 +293,7 @@ Successful and Error Authentication Response are in the same manor as [OpenID Co
 
 On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
 
-The following is a non-normative example of a response from the token endpoint. The novelty being that the returned `access_token` may now be used at the `credential` endpoint.
+The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Holder to request a `credential` from the credential endpoint.
 
 ```
 {
