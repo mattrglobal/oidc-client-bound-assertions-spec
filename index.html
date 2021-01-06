@@ -1071,7 +1071,7 @@ tr:nth-child(2n+1) > td {
 <thead><tr>
 <td class="left"></td>
 <td class="center">OpenID Connect Credential Provider</td>
-<td class="right">December 2020</td>
+<td class="right">January 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Looker &amp; Thompson</td>
@@ -1088,7 +1088,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-12-21" class="published">21 December 2020</time>
+<time datetime="2021-01-05" class="published">5 January 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1156,10 +1156,13 @@ tr:nth-child(2n+1) > td {
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-credential" class="xref">Credential</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-credential-endpoint" class="xref">Credential Endpoint</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-token-endpoint-response" class="xref">Token Endpoint Response</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-token-endpoint-response-wit" class="xref">Token Endpoint Response (with credential)</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-credential-endpoint" class="xref">Credential Endpoint</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="xref">3.4</a>.  <a href="#name-token-endpoint-response-wit" class="xref">Token Endpoint Response (with credential)</a><a href="#section-toc.1-1.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1473,24 +1476,43 @@ Location: https://server.example.com/authorize?
 </div>
 </section>
 </div>
-<div id="credential-endpoint">
+<div id="token-endpoint-response">
 <section id="section-3.2">
-        <h3 id="name-credential-endpoint">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-credential-endpoint" class="section-name selfRef">Credential Endpoint</a>
+        <h3 id="name-token-endpoint-response">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-token-endpoint-response" class="section-name selfRef">Token Endpoint Response</a>
         </h3>
-<p id="section-3.2-1">TODO<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">The following is a non-normative example of a response from the token endpoint, whereby the <code>access_token</code> authorizes the Holder to request a <code>credential</code> from the credential endpoint.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.2-4">
+<pre>{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
+}
+</pre><a href="#section-3.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="credential-endpoint">
+<section id="section-3.3">
+        <h3 id="name-credential-endpoint">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-credential-endpoint" class="section-name selfRef">Credential Endpoint</a>
+        </h3>
+<p id="section-3.3-1">TODO<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-endpoint-response-with-credential">
-<section id="section-3.3">
+<section id="section-3.4">
         <h3 id="name-token-endpoint-response-wit">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-token-endpoint-response-wit" class="section-name selfRef">Token Endpoint Response (with credential)</a>
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-token-endpoint-response-wit" class="section-name selfRef">Token Endpoint Response (with credential)</a>
         </h3>
-<p id="section-3.3-1">If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
-<p id="section-3.3-4">The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3.3-5">
+<p id="section-3.4-1">If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.<a href="#section-3.4-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.4-5">
 <pre>{
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
   "token_type": "bearer",
@@ -1531,10 +1553,10 @@ Location: https://server.example.com/authorize?
     }
   }
 }
-</pre><a href="#section-3.3-5" class="pilcrow">¶</a>
+</pre><a href="#section-3.4-5" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3-6">The following is a non-normative example of a response from the token endpoint featuring a JWT based credential<a href="#section-3.3-6" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3.3-7">
+<p id="section-3.4-6">The following is a non-normative example of a response from the token endpoint featuring a JWT based credential<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.4-7">
 <pre>{
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
   "token_type": "bearer",
@@ -1560,10 +1582,10 @@ Location: https://server.example.com/authorize?
           --7kLsyBAfQGbg"
   }
 }
-</pre><a href="#section-3.3-7" class="pilcrow">¶</a>
+</pre><a href="#section-3.4-7" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3-8">And the decoded Claim Set of the JWT<a href="#section-3.3-8" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3.3-9">
+<p id="section-3.4-8">And the decoded Claim Set of the JWT<a href="#section-3.4-8" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.4-9">
 <pre>{
   "iss": "issuer": "https://issuer.edu",
   "sub": "123456789",
@@ -1592,7 +1614,7 @@ Location: https://server.example.com/authorize?
     }
   }
 }
-</pre><a href="#section-3.3-9" class="pilcrow">¶</a>
+</pre><a href="#section-3.4-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>

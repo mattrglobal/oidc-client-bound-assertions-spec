@@ -287,6 +287,23 @@ And the decoded Claim Set of the JWT
 }
 ```
 
+## Token Endpoint Response
+
+Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
+
+On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
+
+The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Holder to request a `credential` from the credential endpoint.
+
+```
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
+}
+```
+
 ## Credential Endpoint
 
 TODO
