@@ -358,7 +358,6 @@ And the decoded Claim Set of the JWT
 }
 ```
 
-
 ## Token Endpoint Response (with credential)
 
 If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for `format` indicating the credentials format and `data` containing the Credential.
