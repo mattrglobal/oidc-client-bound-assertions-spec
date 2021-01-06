@@ -208,18 +208,85 @@ did
 
 Public private key pairs are used by a requesting Client to establish a means of binding to the resulting credential. A Client making a Credential Request to an OpenID Provider must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
 
-
 ## Response Types
 
 It is RECOMMENDED that a Credential Request flow use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps) as defined in OpenID Connect core.
 
 For instances where [implicit flow](https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth) is used, the `response_type` of `credential` SHOULD be used.
 
+## Token Endpoint Response
+
+Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
+
+On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
+
+The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Holder to request a `credential` from the credential endpoint.
+
+```
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
+}
+```
+# Credential Endpoint
+
+The credential endpoint is used by a Holder to request the issuance of a verifiable credential from a Credential Provder (OP).
+
+The Holder MUST use the `access_token` previously acquired in the token endpoint response from the Credential Provider as an authorization header.  It is recommended that the `access_token` be sender constrained (Note: do we require this or leave as optional based on the Credential Provider's preference, to provide a DPoP example).
+
+## Credential Endpoint Request Parameters
+
+The Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential.  When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
+
+The Holder may also specify the `credential_format` they wish the credential to be returned in, given it is supported by the Credential Provider. If not specified or not supported the Credential Provider will use their preferred default format.
+
+When a signed request is not provided the Credential Provider will use the `sub` associated with the initial `auth` request, where possible.  If a `sub` value is not available an error should be returned by the Credential Provider.
+
+request
+: OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a `sub` the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that `sub`.
+
+A non-normative example of a Signed Credential request.
+
+```
+POST /credential HTTP/1.1
+Host: https://issuer.example.com
+Authorization: Bearer <access-token>
+  request=<signed-jwt-request-obj>
+```
+
+Where the decoded payload of the request parameter is as follows:
+
+```
+{
+  "aud": "https://issuer.example.com",
+  "iss": "https://wallet.example.com",
+  "sub": "urn:uuid:dc000c79-6aa3-45f2-9527-43747d5962a5",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
+  "credential_format": "w3cvc-jwt",
+  "nonce": "43747d5962a5",
+  "iat": 1591069056,
+  "exp": 1591069556
+}
+```
+
 # Credential Response
+```
+{
+  "credential": <credential>
+}
+```
 
 ## Credential
 
-Formats of the Credential can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider SHOULD make the supported credential formats available at their openid-configuration meta-data endpoint.
+Formats of the `credential` can vary, examples include JSON-LD or JWT based Credentials, the OpenID provider SHOULD make the supported credential formats available at their openid-configuration meta-data endpoint.
 
 The following is a non-normative example of a Credential issued as a [W3C Verifiable Credential 1.0](https://www.w3.org/TR/vc-data-model/) compliant format in JSON-LD.
 
@@ -234,7 +301,7 @@ The following is a non-normative example of a Credential issued as a [W3C Verifi
   "issuer": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd",
   "issuanceDate": "2020-03-10T04:24:12.164Z",
   "credentialSubject": {
-    "id": "123456789",
+    "id": "urn:uuid:dc000c79-6aa3-45f2-9527-43747d5962a5",
     "jwk": {
       "crv":"secp256k1",
       "kid":"YkDpvGNsch2lFBf6p8u3",
@@ -269,8 +336,8 @@ And the decoded Claim Set of the JWT
 
 ```
 {
-  "iss": "issuer": "https://issuer.edu",
-  "sub": "123456789",
+  "iss": "https://issuer.example.com",
+  "sub": "urn:uuid:dc000c79-6aa3-45f2-9527-43747d5962a5",
   "sub_jwk" : {
     "crv":"secp256k1",
     "kid":"YkDpvGNsch2lFBf6p8u3",
@@ -280,33 +347,16 @@ And the decoded Claim Set of the JWT
   },
   "iat": 1591069056,
   "exp": 1591069556,
-  "https://www.w3.org/2018/credentials/examples/v1/degree": {
-     "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
-     "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
+  "vc": {
+    "credentialSubject": {
+      "https://www.w3.org/2018/credentials/examples/v1/degree": {
+        "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+        "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
+      }
+    }
   }
 }
 ```
-
-## Token Endpoint Response
-
-Successful and Error Authentication Response are in the same manor as [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) with the `code` parameter always being returned with the Authorization Code Flow.
-
-On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
-
-The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Holder to request a `credential` from the credential endpoint.
-
-```
-{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
-}
-```
-
-## Credential Endpoint
-
-TODO
 
 
 ## Token Endpoint Response (with credential)
