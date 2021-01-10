@@ -347,13 +347,9 @@ And the decoded Claim Set of the JWT
   },
   "iat": 1591069056,
   "exp": 1591069556,
-  "vc": {
-    "credentialSubject": {
-      "https://www.w3.org/2018/credentials/examples/v1/degree": {
-        "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
-        "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
-      }
-    }
+  "https://www.w3.org/2018/credentials/examples/v1/degree": {
+    "https://www.w3.org/2018/credentials/examples/v1/type": "BachelorDegree",
+    "https://www.w3.org/2018/credentials/examples/v1/name": "Bachelor of Science and Arts"
   }
 }
 ```
