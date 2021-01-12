@@ -260,7 +260,10 @@ A non-normative example of a Signed Credential request.
 POST /credential HTTP/1.1
 Host: https://issuer.example.com
 Authorization: Bearer <access-token>
-  request=<signed-jwt-request-obj>
+Content-Type: application/json
+{
+  "request": <signed-jwt-request-obj>
+}
 ```
 
 Where the decoded payload of the request parameter is as follows:
