@@ -242,7 +242,6 @@ It is recommended that the Credential Endpoint SHOULD enforce presentation of th
 
 The Credential Endpoint SHOULD support the use of Cross Origin Resource Sharing (CORS) [CORS] and or other methods as appropriate to enable Java Script Clients to access the endpoint.
 
-The Holder MUST use the `access_token` previously acquired in the token endpoint response from the Credential Provider as an authorization header.  It is recommended that the `access_token` be sender constrained (Note: do we require this or leave as optional based on the Credential Provider's preference, to provide a DPoP example).
 
 ## Credential Endpoint Request Parameters
 
