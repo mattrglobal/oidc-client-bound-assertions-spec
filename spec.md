@@ -247,7 +247,7 @@ The Credential Endpoint SHOULD support the use of Cross Origin Resource Sharing 
 
 The Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential.  When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
 
-The Holder may also specify the `credential_format` they wish the credential to be returned in, given it is supported by the Credential Provider. If not specified or not supported the Credential Provider will use their preferred default format.
+The Holder may also specify the `credential_format` they wish the credential to be returned in, given it is supported by the Credential Provider. If not specified or not supported the Credential Provider will use their preferred default format. (Note if we are going to have a default we need to specify it)
 
 When a signed request is not provided the Credential Provider will use the `sub` associated with the initial `auth` request, where possible.  If a `sub` value is not available an error should be returned by the Credential Provider.
 
