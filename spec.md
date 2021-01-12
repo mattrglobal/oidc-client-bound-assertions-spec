@@ -232,7 +232,15 @@ The following is a non-normative example of a response from the token endpoint, 
 ```
 # Credential Endpoint
 
-The credential endpoint is used by a Holder to request the issuance of a verifiable credential from a Credential Provder (OP).
+The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
+
+Communication with the Credential Endpoint MUST utilize TLS. See Section 16.17 for more information on using TLS.
+
+The Credential Endpoint MUST support the use of HTTP POST methods defined in RFC 2616 [RFC2616].
+
+It is recommended that the Credential Endpoint SHOULD enforce presentation of the OAuth2.0 Access Token to be sender constrained [DPOP](https://tools.ietf.org/html/draft-fett-oauth-dpop-04). However the Credential Endpoint MUST also accept Access Tokens as OAuth 2.0 Bearer Token Usage [RFC6750]. (Note: do we remove?)
+
+The Credential Endpoint SHOULD support the use of Cross Origin Resource Sharing (CORS) [CORS] and or other methods as appropriate to enable Java Script Clients to access the endpoint.
 
 The Holder MUST use the `access_token` previously acquired in the token endpoint response from the Credential Provider as an authorization header.  It is recommended that the `access_token` be sender constrained (Note: do we require this or leave as optional based on the Credential Provider's preference, to provide a DPoP example).
 
