@@ -15,7 +15,7 @@ status = "informational"
 initials = "T."
 surname = "Looker"
 fullname = "Tobias Looker"
-#role = "reviewer"
+#role = "editor"
 organization = "MATTR Ltd"
 [author.address]
 email = "tobias.looker@mattr.global"
@@ -24,10 +24,28 @@ email = "tobias.looker@mattr.global"
 initials = "J."
 surname = "Thompson"
 fullname = "John Thompson"
-#role = "editor"
+#role = "reviewer"
 organization = "MATTR Ltd"
 [author.address]
 email = "john.thompson@mattr.global"
+
+[[author]]
+initials = "A."
+surname = "Lemmon"
+fullname = "Adam Lemmon"
+#role = "editor"
+organization = "TRYBE ID"
+[author.address]
+email = "adam@trybe.id"
+
+[[author]]
+initials = "K."
+surname = "Cameron"
+fullname = "Kim Cameron"
+#role = "reviewer"
+organization = "TRYBE ID"
+[author.address]
+email = "kim@identityblog.com"
 %%%
 
 .# Abstract
