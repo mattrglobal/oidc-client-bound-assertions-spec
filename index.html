@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-01-15" class="published">15 January 2021</time>
+<time datetime="2021-01-20" class="published">20 January 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1439,7 +1439,7 @@ Location: https://server.example.com/authorize?
       <h2 id="name-credential-endpoint">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-credential-endpoint" class="section-name selfRef">Credential Endpoint</a>
       </h2>
-<p id="section-3-1">The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the <code>openid_credential</code> scope was granted.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Client makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the <code>openid_credential</code> scope was granted.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Communication with the Credential Endpoint MUST utilize TLS. See Section 16.17 for more information on using TLS.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">The Credential Endpoint MUST support the use of HTTP POST methods defined in RFC 2616 [RFC2616].<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">It is recommended that the Credential Endpoint SHOULD enforce presentation of the OAuth2.0 Access Token to be sender constrained <a href="https://tools.ietf.org/html/draft-fett-oauth-dpop-04">DPOP</a>. However the Credential Endpoint MUST also accept Access Tokens as OAuth 2.0 Bearer Token Usage [RFC6750]. (Note: do we remove?)<a href="#section-3-4" class="pilcrow">¶</a></p>
@@ -1450,8 +1450,8 @@ Location: https://server.example.com/authorize?
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-credential-endpoint-request" class="section-name selfRef">Credential Endpoint Request Parameters</a>
         </h3>
 <p id="section-3.1-1">The Holder may provide a signed request object containing the <code>sub</code> to be used as the subject for the resulting credential.  When a <code>sub</code> claim is present within the request object an associated <code>sub_jwk</code> claim MUST also be present of which the request object MUST be signed with, therefore proving control over the <code>sub</code>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">The Holder may also specify the <code>credential_format</code> they wish the credential to be returned in, given it is supported by the Credential Provider. If not specified or not supported the Credential Provider will use their preferred default format. (Note if we are going to have a default we need to specify it)<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">When a signed request is not provided the Credential Provider will use the <code>sub</code> associated with the initial <code>auth</code> request, where possible.  If a <code>sub</code> value is not available an error should be returned by the Credential Provider.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The Holder may also specify the <code>credential_format</code> they wish the returned credential to be formatted as. If the provider receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the credential_format is not specified in the request SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the provider to determine this?)<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">When a signed request is not provided the Credential Provider will use the <code>sub</code> associated with the initial <code>auth</code> request, where possible.  If a <code>sub</code> value is not available the provider MUST return an error response, as per [TODO].<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-3.1-4">
           <dt id="section-3.1-4.1">request</dt>
 <dd id="section-3.1-4.2">
