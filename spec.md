@@ -250,7 +250,7 @@ The following is a non-normative example of a response from the token endpoint, 
 ```
 # Credential Endpoint
 
-The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
+The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Client makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
 
 Communication with the Credential Endpoint MUST utilize TLS. See Section 16.17 for more information on using TLS.
 
