@@ -267,7 +267,7 @@ The Holder may provide a signed request object containing the `sub` to be used a
 
 The Holder may also specify the `credential_format` they wish the returned credential to be formatted as. If the provider receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the credential_format is not specified in the request SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the provider to determine this?)
 
-When a signed request is not provided the Credential Provider will use the `sub` associated with the initial `auth` request, where possible.  If a `sub` value is not available an error should be returned by the Credential Provider.
+When a signed request is not provided the Credential Provider will use the `sub` associated with the initial `auth` request, where possible.  If a `sub` value is not available the provider MUST return an error response, as per [TODO].
 
 request
 : OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a `sub` the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that `sub`.
