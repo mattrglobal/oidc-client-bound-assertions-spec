@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-01-20" class="published">20 January 2021</time>
+<time datetime="2021-01-21" class="published">21 January 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1175,9 +1175,6 @@ tr:nth-child(2n+1) > td {
 <ul class="toc ulEmpty">
 <li class="toc ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-credential" class="xref">Credential</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-<li class="toc ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-token-endpoint-response-wit" class="xref">Token Endpoint Response (with credential)</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1572,121 +1569,6 @@ Content-Type: application/json
   }
 }
 </pre><a href="#section-4.1-7" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="token-endpoint-response-with-credential">
-<section id="section-4.2">
-        <h3 id="name-token-endpoint-response-wit">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-token-endpoint-response-wit" class="section-name selfRef">Token Endpoint Response (with credential)</a>
-        </h3>
-<p id="section-4.2-1">If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-5">
-<pre>{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-  "credential": {
-    "format": "w3cvc-jsonld",
-    "data": {
-      "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://www.w3.org/2018/credentials/examples/v1"
-      ],
-      "id": "http://example.gov/credentials/3732",
-      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "https://issuer.edu",
-      "issuanceDate": "2020-03-10T04:24:12.164Z",
-      "credentialSubject": {
-        "id": "123456789",
-        "publicKey": {
-          "crv":"secp256k1",
-          "kid":"YkDpvGNsch2lFBf6p8u3",
-          "kty":"EC",
-          "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-          "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-        },
-        "degree": {
-          "type": "BachelorDegree",
-          "name": "Bachelor of Science and Arts"
-        }
-      },
-      "proof": {
-        "type": "Ed25519Signature2018",
-        "created": "2020-04-10T21:35:35Z",
-        "verificationMethod": "https://issuer.edu/keys/1",
-        "proofPurpose": "assertionMethod",
-        "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
-      }
-    }
-  }
-}
-</pre><a href="#section-4.2-5" class="pilcrow">¶</a>
-</div>
-<p id="section-4.2-6">The following is a non-normative example of a response from the token endpoint featuring a JWT based credential<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-7">
-<pre>{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-  "credential": {
-      "format": "w3cvc-jwt",
-      "data":
-          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDpleGFtcGxlOmFiZmUxM2Y3MTIxMjA0
-          MzFjMjc2ZTEyZWNhYiNrZXlzLTEifQ.eyJzdWIiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxY
-          zI3NmUxMmVjMjEiLCJqdGkiOiJodHRwOi8vZXhhbXBsZS5lZHUvY3JlZGVudGlhbHMvMzczMiIsImlzc
-          yI6Imh0dHBzOi8vZXhhbXBsZS5jb20va2V5cy9mb28uandrIiwibmJmIjoxNTQxNDkzNzI0LCJpYXQiO
-          jE1NDE0OTM3MjQsImV4cCI6MTU3MzAyOTcyMywibm9uY2UiOiI2NjAhNjM0NUZTZXIiLCJ2YyI6eyJAY
-          29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vd
-          3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZ
-          UNyZWRlbnRpYWwiLCJVbml2ZXJzaXR5RGVncmVlQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjd
-          CI6eyJkZWdyZWUiOnsidHlwZSI6IkJhY2hlbG9yRGVncmVlIiwibmFtZSI6IjxzcGFuIGxhbmc9J2ZyL
-          UNBJz5CYWNjYWxhdXLDqWF0IGVuIG11c2lxdWVzIG51bcOpcmlxdWVzPC9zcGFuPiJ9fX19.KLJo5GAy
-          BND3LDTn9H7FQokEsUEi8jKwXhGvoN3JtRa51xrNDgXDb0cq1UTYB-rK4Ft9YVmR1NI_ZOF8oGc_7wAp
-          8PHbF2HaWodQIoOBxxT-4WNqAxft7ET6lkH-4S6Ux3rSGAmczMohEEf8eCeN-jC8WekdPl6zKZQj0YPB
-          1rx6X0-xlFBs7cl6Wt8rfBP_tZ9YgVWrQmUWypSioc0MUyiphmyEbLZagTyPlUyflGlEdqrZAv6eSe6R
-          txJy6M1-lD7a5HTzanYTWBPAUHDZGyGKXdJw-W_x0IWChBzI8t3kpG253fg6V3tPgHeKXE94fz_QpYfg
-          --7kLsyBAfQGbg"
-  }
-}
-</pre><a href="#section-4.2-7" class="pilcrow">¶</a>
-</div>
-<p id="section-4.2-8">And the decoded Claim Set of the JWT<a href="#section-4.2-8" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-9">
-<pre>{
-  "iss": "issuer": "https://issuer.edu",
-  "sub": "123456789",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "nbf": 1541493724,
-  "iat": 1541493724,
-  "exp": 1573029723,
-  "nonce": "660!6345FSer",
-  "vc": {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://www.w3.org/2018/credentials/examples/v1"
-    ],
-    "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-    "credentialSubject": {
-      "degree": {
-        "type": "BachelorDegree",
-        "name": "Bachelor of Science and Arts"
-      }
-    }
-  }
-}
-</pre><a href="#section-4.2-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
