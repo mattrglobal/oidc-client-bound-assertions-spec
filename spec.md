@@ -306,8 +306,11 @@ Where the decoded payload of the request parameter is as follows:
 ```
 
 # Credential Response
+format : REQUIRED. The proof format the credential was returned in. For example `w3cvc-jsonld` or `w3cvc-jwt`.
+credential : REQUIRED. A cryptographically verifiable proof in the defined proof `format`. Most commonly a Linked Data Proof or a JWS.
 ```
 {
+  "format": "w3cvc-jsonld",
   "credential": <credential>
 }
 ```

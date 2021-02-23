@@ -1073,7 +1073,7 @@ tr:nth-child(2n+1) > td {
 <thead><tr>
 <td class="left"></td>
 <td class="center">OpenID Connect Credential Provider</td>
-<td class="right">January 2021</td>
+<td class="right">February 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Looker, et al.</td>
@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-01-20" class="published">20 January 2021</time>
+<time datetime="2021-02-23" class="published">23 February 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1498,11 +1498,14 @@ Content-Type: application/json
       <h2 id="name-credential-response">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-credential-response" class="section-name selfRef">Credential Response</a>
       </h2>
-<div class="artwork art-text alignLeft" id="section-4-1">
+<p id="section-4-1">format : REQUIRED. The proof format the credential was returned in. For example <code>w3cvc-jsonld</code> or <code>w3cvc-jwt</code>.
+credential : REQUIRED. A cryptographically verifiable proof in the defined proof <code>format</code>. Most commonly a Linked Data Proof or a JWS.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-4-2">
 <pre>{
+  "format": "w3cvc-jsonld",
   "credential": &lt;credential&gt;
 }
-</pre><a href="#section-4-1" class="pilcrow">¶</a>
+</pre><a href="#section-4-2" class="pilcrow">¶</a>
 </div>
 <div id="credential">
 <section id="section-4.1">
