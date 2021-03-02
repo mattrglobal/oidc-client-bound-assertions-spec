@@ -68,7 +68,7 @@ This specification defines how an OP can be extended to provide a set of claims 
 
 Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).
 
-To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (RP) of which that Holder (OP) controls and may present onward to Verifiers (RPs).
+To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as a RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
 
 Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.
 

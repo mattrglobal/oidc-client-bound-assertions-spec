@@ -1073,7 +1073,7 @@ tr:nth-child(2n+1) > td {
 <thead><tr>
 <td class="left"></td>
 <td class="center">OpenID Connect Credential Provider</td>
-<td class="right">February 2021</td>
+<td class="right">March 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Looker, et al.</td>
@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-02-27" class="published">27 February 2021</time>
+<time datetime="2021-03-02" class="published">2 March 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1210,7 +1210,7 @@ tr:nth-child(2n+1) > td {
 <p id="section-1-2">In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as <a href="https://github.com/WICG/WebID#the-rp-tracking-problem">RP tracking</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">This specification defines how an OP can be extended to provide a set of claims to a RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (RP) of which that Holder (OP) controls and may present onward to Verifiers (RPs).<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-5">To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as a RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
 <section id="section-1.1">
