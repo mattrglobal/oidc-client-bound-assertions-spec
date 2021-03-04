@@ -62,9 +62,15 @@ This specification defines how an OpenID provider can be extended beyond being t
 
 OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
+In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as [RP tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how the OpenID Connect protocol can be extended so that a supporting Client can obtain a credential on-behalf of an End-User. Where a credential is defined as an assertion about the End-User which is bound to the Client in an authenticatable manner based on public/private key cryptography. This feature then enables the Client to onward present the credential to other relying parties whilst authenticating the established binding to the assertion.
+This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
+
+Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).
+
+To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as a RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
+
+Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.
 
 ## Requirements Notation and Conventions
 
