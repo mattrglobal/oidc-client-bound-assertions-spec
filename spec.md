@@ -64,7 +64,7 @@ OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. 
 
 In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as [RP tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how an OP can be extended to provide a set of claims to a RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
+This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
 
 Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).
 
