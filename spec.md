@@ -85,13 +85,22 @@ All uses of JSON Web Signature (JWS) [JWS](https://tools.ietf.org/html/rfc7515) 
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
 Credential
-: An assertion containing claims made about an End-User that has been bound in a provable manner through the use of public/private key pairs to the requesting Client.
+: A set of claims about the End-User (subject) which is cryptographically bound to the holder in an authenticatable manner based on public/private key cryptography.
 
 Credential Request
-: An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.
+: An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Holder) receiving a credential about the authenticated End-User.
 
 Holder
-: An entity that is tasked with holding credential(s) and presenting them to relying parties on behalf of the consenting End-User (subject of the credential(s)). 
+: A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).   
+
+Credential Issuer (CI)
+: A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.
+
+Subject
+: An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the holder of a credential is the subject, but in certain cases it is not. For example, a parent (the holder) might hold the credentials of a child (the subject), or a pet owner (the holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.
+
+Verifier
+: A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials. 
 
 ## Overview
 
