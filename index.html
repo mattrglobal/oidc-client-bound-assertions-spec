@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-03-02" class="published">2 March 2021</time>
+<time datetime="2021-03-15" class="published">15 March 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1208,7 +1208,7 @@ tr:nth-child(2n+1) > td {
       </h2>
 <p id="section-1-1">OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as <a href="https://github.com/WICG/WebID#the-rp-tracking-problem">RP tracking</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This specification defines how an OP can be extended to provide a set of claims to a RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-3">This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as a RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.<a href="#section-1-6" class="pilcrow">¶</a></p>
@@ -1231,15 +1231,27 @@ tr:nth-child(2n+1) > td {
 <dl class="dlParallel" id="section-1.2-2">
           <dt id="section-1.2-2.1">Credential</dt>
 <dd id="section-1.2-2.2">
-            <p id="section-1.2-2.2.1">An assertion containing claims made about an End-User that has been bound in a provable manner through the use of public/private key pairs to the requesting Client.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.2.1">A set of claims about the End-User (subject) which is cryptographically bound to the holder in an authenticatable manner based on public/private key cryptography.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-1.2-2.3">Credential Request</dt>
 <dd id="section-1.2-2.4">
-            <p id="section-1.2-2.4.1">An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client receiving a credential about the authenticated End-User.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.4.1">An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Holder) receiving a credential about the authenticated End-User.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-1.2-2.5">Holder</dt>
 <dd id="section-1.2-2.6">
-            <p id="section-1.2-2.6.1">An entity that is tasked with holding credential(s) and presenting them to relying parties on behalf of the consenting End-User (subject of the credential(s)).<a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.6.1">A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).<br><a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+<dt id="section-1.2-2.7">Credential Issuer (CI)</dt>
+<dd id="section-1.2-2.8">
+            <p id="section-1.2-2.8.1">A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.<a href="#section-1.2-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+<dt id="section-1.2-2.9">Subject</dt>
+<dd id="section-1.2-2.10">
+            <p id="section-1.2-2.10.1">An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the holder of a credential is the subject, but in certain cases it is not. For example, a parent (the holder) might hold the credentials of a child (the subject), or a pet owner (the holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.<a href="#section-1.2-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+<dt id="section-1.2-2.11">Verifier</dt>
+<dd id="section-1.2-2.12">
+            <p id="section-1.2-2.12.1">A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials.<a href="#section-1.2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
 </dl>
 </section>
