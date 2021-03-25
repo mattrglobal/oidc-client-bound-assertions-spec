@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-03-23" class="published">23 March 2021</time>
+<time datetime="2021-03-25" class="published">25 March 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1149,16 +1149,13 @@ tr:nth-child(2n+1) > td {
                 <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-credential-request-2" class="xref">Credential Request</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.2.2.2">
-                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-signed-credential-request" class="xref">Signed Credential Request</a><a href="#section-toc.1-1.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-request-parameters" class="xref">Request Parameters</a><a href="#section-toc.1-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.2.2.3">
-                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-request-parameters" class="xref">Request Parameters</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-response-types" class="xref">Response Types</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
 <li class="toc ulEmpty" id="section-toc.1-1.2.2.4">
-                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-response-types" class="xref">Response Types</a><a href="#section-toc.1-1.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-<li class="toc ulEmpty" id="section-toc.1-1.2.2.5">
-                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="xref">2.5</a>.  <a href="#name-token-endpoint-response" class="xref">Token Endpoint Response</a><a href="#section-toc.1-1.2.2.5.1" class="pilcrow">¶</a></p>
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-token-endpoint-response" class="xref">Token Endpoint Response</a><a href="#section-toc.1-1.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1175,9 +1172,6 @@ tr:nth-child(2n+1) > td {
 <ul class="toc ulEmpty">
 <li class="toc ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-credential" class="xref">Credential</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-<li class="toc ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-token-endpoint-response-wit" class="xref">Token Endpoint Response (with credential)</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1352,98 +1346,58 @@ Location: https://server.example.com/authorize?
 <p id="section-2.1-4">When a request of this nature is made, the <code>access_token</code> issued to the Holder authorizes it to access the credential endpoint to obtain a credential from the CI.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="signed-credential-request">
-<section id="section-2.2">
-        <h3 id="name-signed-credential-request">
-<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-signed-credential-request" class="section-name selfRef">Signed Credential Request</a>
-        </h3>
-<p id="section-2.2-1">When making a credential request, the Client can elect to sign the request, making use of the <a href="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request object</a> defined in OpenID Connect Core.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">The following example documents this variation.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.2-3">A non-normative example of a Signed Credential request.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.2-4">
-<pre>https://issuer.example.com/authorize
-?scope=openid%20openid_credential
-&amp;request=&lt;signed-jwt-request-obj&gt;
-</pre><a href="#section-2.2-4" class="pilcrow">¶</a>
-</div>
-<p id="section-2.2-5">Where the decoded payload of the request parameter is as follows<a href="#section-2.2-5" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.2-6">
-<pre>{
-  "response_type": "code",
-  "client_id": "IAicV0pt9co5nn9D1tUKDCoPQq8BFlGH",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "redirect_uri": "https://client.example.com/callback",
-  "credential_format": "w3cvc-jsonld"
-}
-</pre><a href="#section-2.2-6" class="pilcrow">¶</a>
-</div>
-<p id="section-2.2-7">Where the jwt was signed by the key referenced in the <code>sub_jwk</code> section of the request.<a href="#section-2.2-7" class="pilcrow">¶</a></p>
-<p id="section-2.2-8">When a request of this nature is made, the resulting credential will be made available in the response body of the token endpoint.<a href="#section-2.2-8" class="pilcrow">¶</a></p>
-<p id="section-2.2-9">The value of the <code>request</code> parameter MUST either be a valid <a href="https://tools.ietf.org/html/rfc7519">JWT</a> or <a href="https://tools.ietf.org/html/rfc7516">JWE</a> whose claims are the credential request parameters, however the inner payload MUST be a valid <a href="https://tools.ietf.org/html/rfc7519">JWT</a> signed by the Holder who created the request.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
-<p id="section-2.2-10">The key used to sign the request object MUST validate to that featured in the <code>sub_jwk</code> parameter of the request.<a href="#section-2.2-10" class="pilcrow">¶</a></p>
-<p id="section-2.2-11">Unsigned plaintext Request Objects, containing <code>none</code> in the <code>alg</code> value of the JOSE header MUST not be supported.<a href="#section-2.2-11" class="pilcrow">¶</a></p>
-<p id="section-2.2-12">If the Request Object signing validation fails or is missing, the CI MUST respond to the request with the Error Response parameter, <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthError">section 3.1.2.6.</a> with Error code: <code>invalid_request_object</code>.<a href="#section-2.2-12" class="pilcrow">¶</a></p>
-<p id="section-2.2-13">If the <code>did</code> value is present in the request and the OpenID Provider does not support the usage of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> the value should be ignored.<a href="#section-2.2-13" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="request-parameters">
-<section id="section-2.3">
+<section id="section-2.2">
         <h3 id="name-request-parameters">
-<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-request-parameters" class="section-name selfRef">Request Parameters</a>
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-request-parameters" class="section-name selfRef">Request Parameters</a>
         </h3>
-<p id="section-2.3-1">A Credential Request uses the OpenID and OAuth2.0 request parameters as outlined in section <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">3.1.2.1</a> of OpenID Connect core, except for the following additional constraints.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
-<dl class="dlParallel" id="section-2.3-2">
-          <dt id="section-2.3-2.1">scope</dt>
-<dd id="section-2.3-2.2">
-            <p id="section-2.3-2.2.1">REQUIRED. A Credential Request MUST contain the <code>openid_credential</code> scope value in the second position directly after the <code>openid</code> scope.<a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">A Credential Request uses the OpenID and OAuth2.0 request parameters as outlined in section <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">3.1.2.1</a> of OpenID Connect core, except for the following additional constraints.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<dl class="dlParallel" id="section-2.2-2">
+          <dt id="section-2.2-2.1">scope</dt>
+<dd id="section-2.2-2.2">
+            <p id="section-2.2-2.2.1">REQUIRED. A Credential Request MUST contain the <code>openid_credential</code> scope value in the second position directly after the <code>openid</code> scope.<a href="#section-2.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-2.3-2.3">credential_format</dt>
-<dd id="section-2.3-2.4">
-            <p id="section-2.3-2.4.1">REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the <code>credential_formats_supported</code> attribute.<a href="#section-2.3-2.4.1" class="pilcrow">¶</a></p>
+<dt id="section-2.2-2.3">credential_format</dt>
+<dd id="section-2.2-2.4">
+            <p id="section-2.2-2.4.1">REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the <code>credential_formats_supported</code> attribute.<a href="#section-2.2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-2.3-2.5">sub_jwk</dt>
-<dd id="section-2.3-2.6">
-            <p id="section-2.3-2.6.1">OPTIONAL. Used when making a Signed Credential Request, defines the key material the Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid <a href="https://tools.ietf.org/html/rfc7517">JWK</a>.<a href="#section-2.3-2.6.1" class="pilcrow">¶</a></p>
+<dt id="section-2.2-2.5">sub_jwk</dt>
+<dd id="section-2.2-2.6">
+            <p id="section-2.2-2.6.1">OPTIONAL. Used when making a Signed Credential Request, defines the key material the Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid <a href="https://tools.ietf.org/html/rfc7517">JWK</a>.<a href="#section-2.2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-2.3-2.7">did</dt>
-<dd id="section-2.3-2.8">
-            <p id="section-2.3-2.8.1">OPTIONAL. Defines the relationship between the key material the Holder is requesting the credential to be bound to and a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>. Processing of this value requires the CI to support the resolution of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> which is advertised in their openid-configuration metadata, under the <code>dids_supported</code> attribute. The value of this field MUST be a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.3-2.8.1" class="pilcrow">¶</a></p>
+<dt id="section-2.2-2.7">did</dt>
+<dd id="section-2.2-2.8">
+            <p id="section-2.2-2.8.1">OPTIONAL. Defines the relationship between the key material the Holder is requesting the credential to be bound to and a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>. Processing of this value requires the CI to support the resolution of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> which is advertised in their openid-configuration metadata, under the <code>dids_supported</code> attribute. The value of this field MUST be a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
 </dl>
-<p id="section-2.3-3">Public private key pairs are used by a requesting Holder to establish a means of binding to the resulting credential. A Holder making a Credential Request to a CI must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a <a href="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request</a> defined in OpenID Connect Core.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-3">Public private key pairs are used by a requesting Holder to establish a means of binding to the resulting credential. A Holder making a Credential Request to a CI must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a <a href="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request</a> defined in OpenID Connect Core.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="response-types">
-<section id="section-2.4">
+<section id="section-2.3">
         <h3 id="name-response-types">
-<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-response-types" class="section-name selfRef">Response Types</a>
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-response-types" class="section-name selfRef">Response Types</a>
         </h3>
-<p id="section-2.4-1">It is RECOMMENDED that a Credential Request flow use the <a href="https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps">authorization code flow</a> as defined in OpenID Connect core.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.4-2">For instances where <a href="https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth">implicit flow</a> is used, the <code>response_type</code> of <code>credential</code> SHOULD be used.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">It is RECOMMENDED that a Credential Request flow use the <a href="https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps">authorization code flow</a> as defined in OpenID Connect core.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-2">For instances where <a href="https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth">implicit flow</a> is used, the <code>response_type</code> of <code>credential</code> SHOULD be used.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-endpoint-response">
-<section id="section-2.5">
+<section id="section-2.4">
         <h3 id="name-token-endpoint-response">
-<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-token-endpoint-response" class="section-name selfRef">Token Endpoint Response</a>
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-token-endpoint-response" class="section-name selfRef">Token Endpoint Response</a>
         </h3>
-<p id="section-2.5-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
-<p id="section-2.5-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
-<p id="section-2.5-3">The following is a non-normative example of a response from the token endpoint, whereby the <code>access_token</code> authorizes the Holder to request a <code>credential</code> from the credential endpoint.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-2.5-4">
+<p id="section-2.4-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">The following is a non-normative example of a response from the token endpoint, whereby the <code>access_token</code> authorizes the Holder to request a <code>credential</code> from the credential endpoint.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-2.4-4">
 <pre>{
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
   "token_type": "bearer",
   "expires_in": 86400,
   "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
 }
-</pre><a href="#section-2.5-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.4-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1590,121 +1544,6 @@ credential : REQUIRED. A cryptographically verifiable proof in the defined proof
   }
 }
 </pre><a href="#section-4.1-7" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="token-endpoint-response-with-credential">
-<section id="section-4.2">
-        <h3 id="name-token-endpoint-response-wit">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-token-endpoint-response-wit" class="section-name selfRef">Token Endpoint Response (with credential)</a>
-        </h3>
-<p id="section-4.2-1">If the OpenID Connect request is a Signed Credential Request. The Response from the Token Endpoint MUST include the Credential in the form of an object with value for <code>format</code> indicating the credentials format and <code>data</code> containing the Credential.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">The following is a non-normative example of a response from the token endpoint featuring a JSON-LD based Credential.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-5">
-<pre>{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-  "credential": {
-    "format": "w3cvc-jsonld",
-    "data": {
-      "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://www.w3.org/2018/credentials/examples/v1"
-      ],
-      "id": "http://example.gov/credentials/3732",
-      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "https://issuer.edu",
-      "issuanceDate": "2020-03-10T04:24:12.164Z",
-      "credentialSubject": {
-        "id": "123456789",
-        "publicKey": {
-          "crv":"secp256k1",
-          "kid":"YkDpvGNsch2lFBf6p8u3",
-          "kty":"EC",
-          "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-          "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-        },
-        "degree": {
-          "type": "BachelorDegree",
-          "name": "Bachelor of Science and Arts"
-        }
-      },
-      "proof": {
-        "type": "Ed25519Signature2018",
-        "created": "2020-04-10T21:35:35Z",
-        "verificationMethod": "https://issuer.edu/keys/1",
-        "proofPurpose": "assertionMethod",
-        "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
-      }
-    }
-  }
-}
-</pre><a href="#section-4.2-5" class="pilcrow">¶</a>
-</div>
-<p id="section-4.2-6">The following is a non-normative example of a response from the token endpoint featuring a JWT based credential<a href="#section-4.2-6" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-7">
-<pre>{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
-  "credential": {
-      "format": "w3cvc-jwt",
-      "data":
-          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDpleGFtcGxlOmFiZmUxM2Y3MTIxMjA0
-          MzFjMjc2ZTEyZWNhYiNrZXlzLTEifQ.eyJzdWIiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxY
-          zI3NmUxMmVjMjEiLCJqdGkiOiJodHRwOi8vZXhhbXBsZS5lZHUvY3JlZGVudGlhbHMvMzczMiIsImlzc
-          yI6Imh0dHBzOi8vZXhhbXBsZS5jb20va2V5cy9mb28uandrIiwibmJmIjoxNTQxNDkzNzI0LCJpYXQiO
-          jE1NDE0OTM3MjQsImV4cCI6MTU3MzAyOTcyMywibm9uY2UiOiI2NjAhNjM0NUZTZXIiLCJ2YyI6eyJAY
-          29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vd
-          3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZ
-          UNyZWRlbnRpYWwiLCJVbml2ZXJzaXR5RGVncmVlQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjd
-          CI6eyJkZWdyZWUiOnsidHlwZSI6IkJhY2hlbG9yRGVncmVlIiwibmFtZSI6IjxzcGFuIGxhbmc9J2ZyL
-          UNBJz5CYWNjYWxhdXLDqWF0IGVuIG11c2lxdWVzIG51bcOpcmlxdWVzPC9zcGFuPiJ9fX19.KLJo5GAy
-          BND3LDTn9H7FQokEsUEi8jKwXhGvoN3JtRa51xrNDgXDb0cq1UTYB-rK4Ft9YVmR1NI_ZOF8oGc_7wAp
-          8PHbF2HaWodQIoOBxxT-4WNqAxft7ET6lkH-4S6Ux3rSGAmczMohEEf8eCeN-jC8WekdPl6zKZQj0YPB
-          1rx6X0-xlFBs7cl6Wt8rfBP_tZ9YgVWrQmUWypSioc0MUyiphmyEbLZagTyPlUyflGlEdqrZAv6eSe6R
-          txJy6M1-lD7a5HTzanYTWBPAUHDZGyGKXdJw-W_x0IWChBzI8t3kpG253fg6V3tPgHeKXE94fz_QpYfg
-          --7kLsyBAfQGbg"
-  }
-}
-</pre><a href="#section-4.2-7" class="pilcrow">¶</a>
-</div>
-<p id="section-4.2-8">And the decoded Claim Set of the JWT<a href="#section-4.2-8" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-4.2-9">
-<pre>{
-  "iss": "issuer": "https://issuer.edu",
-  "sub": "123456789",
-  "sub_jwk" : {
-    "crv":"secp256k1",
-    "kid":"YkDpvGNsch2lFBf6p8u3",
-    "kty":"EC",
-    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
-    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
-  },
-  "nbf": 1541493724,
-  "iat": 1541493724,
-  "exp": 1573029723,
-  "nonce": "660!6345FSer",
-  "vc": {
-    "@context": [
-      "https://www.w3.org/2018/credentials/v1",
-      "https://www.w3.org/2018/credentials/examples/v1"
-    ],
-    "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-    "credentialSubject": {
-      "degree": {
-        "type": "BachelorDegree",
-        "name": "Bachelor of Science and Arts"
-      }
-    }
-  }
-}
-</pre><a href="#section-4.2-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
