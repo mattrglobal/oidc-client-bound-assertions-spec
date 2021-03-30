@@ -2,6 +2,10 @@
 
 [Latest Draft](https://mattrglobal.github.io/oidc-client-bound-assertions-spec/)
 
+**Previous versions**
+
+[v0.1](https://mattrglobal.github.io/oidc-client-bound-assertions-spec/v0.1)
+
 This repository is the home to the draft specification to extend an OpenID Connect Provider to support the issuance of credentials which in turn enable new approaches around federated sharing of identity information.
 
 ## Contributing
@@ -16,4 +20,4 @@ Update `spec.md` file with your desired changes.
 
 Run the following to compile the new txt into the output HTML and XML.
 
-```./scripts/build-html.sh```
+`./scripts/build-html.sh`
