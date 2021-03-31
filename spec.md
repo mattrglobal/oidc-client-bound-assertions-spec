@@ -52,7 +52,7 @@ email = "kim@identityblog.com"
 
 OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
 
-In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
+In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as [relying party tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
 This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials.
 
@@ -64,7 +64,7 @@ OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. 
 
 In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as [RP tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs.  This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
+This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs. This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
 
 Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).
 
@@ -91,7 +91,7 @@ Credential Request
 : An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Holder) receiving a credential about the authenticated End-User.
 
 Holder
-: A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).   
+: A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).
 
 Credential Issuer (CI)
 : A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.
@@ -100,11 +100,11 @@ Subject
 : An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the holder of a credential is the subject, but in certain cases it is not. For example, a parent (the holder) might hold the credentials of a child (the subject), or a pet owner (the holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.
 
 Verifier
-: A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials. 
+: A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials.
 
 ## Overview
 
-This specification extends the OpenID Connect protocol for the purposes of credential issuance.  This specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
+This specification extends the OpenID Connect protocol for the purposes of credential issuance. This specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
 
 1. The Holder (acting as an RP) sends a Credential Request to the CI (acting as an OP).
 2. The CI authenticates the End-User and obtains authorization.
@@ -217,6 +217,7 @@ The following is a non-normative example of a response from the token endpoint, 
   "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz"
 }
 ```
+
 # Credential Endpoint
 
 The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Holder makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
@@ -229,14 +230,13 @@ It is recommended that the Credential Endpoint SHOULD enforce presentation of th
 
 The Credential Endpoint SHOULD support the use of Cross Origin Resource Sharing (CORS) [CORS] and or other methods as appropriate to enable Java Script Clients to access the endpoint.
 
-
 ## Credential Endpoint Request Parameters
 
-The Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential.  When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
+The Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential. When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
 
 The Holder may also specify the `credential_format` they wish the returned credential to be formatted as. If the CI receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the `credential_format` is not specified in the request the CI SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the CI to determine this?)
 
-When a signed request is not provided the CI will use the `sub` associated with the initial Credential request, where possible.  If a `sub` value is not available the CI MUST return an error response, as per [TODO].
+When a signed request is not provided the CI will use the `sub` associated with the initial Credential request, where possible. If a `sub` value is not available the CI MUST return an error response, as per [TODO].
 
 request
 : OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a `sub` the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that `sub`.
@@ -275,8 +275,10 @@ Where the decoded payload of the request parameter is as follows:
 ```
 
 # Credential Response
+
 format : REQUIRED. The proof format the credential was returned in. For example `w3cvc-jsonld` or `w3cvc-jwt`.
 credential : REQUIRED. A cryptographically verifiable proof in the defined proof `format`. Most commonly a Linked Data Proof or a JWS.
+
 ```
 {
   "format": "w3cvc-jsonld",
@@ -356,7 +358,7 @@ And the decoded Claim Set of the JWT
 
 # Usage of Decentralized Identifiers
 
-[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential, rather than using a public key directly. 
+[Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential, rather than using a public key directly.
 
 ## Signed Credential Request using a Decentralized Identifier
 
@@ -389,7 +391,7 @@ The following is a non-normative example of requesting the issuance of a credent
   },
   "did": "did:example:1234",
   "redirect_uri": "https://Client.example.com/callback",
-  "credential_format": "w3cvc-jsonld"                                
+  "credential_format": "w3cvc-jsonld"
 
 }
 ```
@@ -439,6 +441,9 @@ An OpenID provider can use the following meta-data elements to advertise its sup
 `credential_supported`
 : Boolean value indicating that the OpenID provider supports the credential issuance flow.
 
+`credential_endpoint`
+: A JSON string value indicating the location of the OpenID providers credential endpoint.
+
 `credential_formats_supported`
 : A JSON array of strings identifying the resulting format of the credential issued at the end of the flow.
 
@@ -465,6 +470,7 @@ The following is a non-normative example of the relevant entries in the openid-c
     "did:sov:"
   ],
   "credential_supported": true,
+  "credential_endpoint": "https://server.example.com/credential",
   "credential_formats_supported": [
     "w3cvc-jsonld",
     "jwt"
