@@ -34,18 +34,18 @@ initials = "A."
 surname = "Lemmon"
 fullname = "Adam Lemmon"
 #role = "editor"
-organization = "TRYBE ID"
+organization = "Convergence.tech"
 [author.address]
-email = "adam@trybe.id"
+email = "adam@convergence.tech"
 
 [[author]]
 initials = "K."
 surname = "Cameron"
 fullname = "Kim Cameron"
 #role = "reviewer"
-organization = "TRYBE ID"
+organization = "Convergence.tech"
 [author.address]
-email = "kim@identityblog.com"
+email = "kim@Convergence.tech"
 %%%
 
 .# Abstract
