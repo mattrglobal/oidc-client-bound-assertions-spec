@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-04-01" class="published">1 April 2021</time>
+<time datetime="2021-04-02" class="published">2 April 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1164,6 +1164,9 @@ tr:nth-child(2n+1) > td {
 <ul class="toc ulEmpty">
 <li class="toc ulEmpty" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-credential-endpoint-request" class="xref">Credential Endpoint Request Parameters</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-down-scoped-credential-requ" class="xref">Down Scoped Credential Request</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
 </ul>
 </li>
@@ -1420,15 +1423,16 @@ Location: https://server.example.com/authorize?
         </h3>
 <p id="section-3.1-1">The Holder may provide a signed request object containing the <code>sub</code> to be used as the subject for the resulting credential. When a <code>sub</code> claim is present within the request object an associated <code>sub_jwk</code> claim MUST also be present of which the request object MUST be signed with, therefore proving control over the <code>sub</code>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">The Holder may also specify the <code>credential_format</code> they wish the returned credential to be formatted as. If the CI receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the <code>credential_format</code> is not specified in the request the CI SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the CI to determine this?)<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">When a signed request is not provided the CI will use the <code>sub</code> associated with the initial Credential request, where possible. If a <code>sub</code> value is not available the CI MUST return an error response, as per [TODO].<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<dl class="dlParallel" id="section-3.1-4">
-          <dt id="section-3.1-4.1">request</dt>
-<dd id="section-3.1-4.2">
-            <p id="section-3.1-4.2.1">OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a <code>sub</code> the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that <code>sub</code>.<a href="#section-3.1-4.2.1" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The Holder may optionally choose to include a <code>claims</code> property within their request to down scope the set of claims returned. If not present the CI will return the complete set of claims.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">When a signed request is not provided the CI will use the <code>sub</code> associated with the initial Credential request, where possible. If a <code>sub</code> value is not available the CI MUST return an error response, as per [TODO].<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<dl class="dlParallel" id="section-3.1-5">
+          <dt id="section-3.1-5.1">request</dt>
+<dd id="section-3.1-5.2">
+            <p id="section-3.1-5.2.1">OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a <code>sub</code> the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that <code>sub</code>.<a href="#section-3.1-5.2.1" class="pilcrow">¶</a></p>
 </dd>
 </dl>
-<p id="section-3.1-5">A non-normative example of a Signed Credential request.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3.1-6">
+<p id="section-3.1-6">A non-normative example of a Signed Credential request.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.1-7">
 <pre>POST /credential HTTP/1.1
 Host: https://issuer.example.com
 Authorization: Bearer &lt;access-token&gt;
@@ -1436,10 +1440,38 @@ Content-Type: application/json
 {
   "request": &lt;signed-jwt-request-obj&gt;
 }
-</pre><a href="#section-3.1-6" class="pilcrow">¶</a>
+</pre><a href="#section-3.1-7" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-7">Where the decoded payload of the request parameter is as follows:<a href="#section-3.1-7" class="pilcrow">¶</a></p>
-<div class="artwork art-text alignLeft" id="section-3.1-8">
+<p id="section-3.1-8">Where the decoded payload of the request parameter is as follows:<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.1-9">
+<pre>{
+  "aud": "https://issuer.example.com",
+  "iss": "https://wallet.example.com",
+  "sub": "urn:uuid:dc000c79-6aa3-45f2-9527-43747d5962a5",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
+  "credential_format": "w3cvc-jsonld",
+  "nonce": "43747d5962a5",
+  "iat": 1591069056,
+  "exp": 1591069556
+}
+</pre><a href="#section-3.1-9" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="down-scoped-credential-request">
+<section id="section-3.2">
+        <h3 id="name-down-scoped-credential-requ">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-down-scoped-credential-requ" class="section-name selfRef">Down Scoped Credential Request</a>
+        </h3>
+<p id="section-3.2-1">The <code>claims</code> property may be used when requesting a Credential in order to reduce the claims returned by the CI.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The following is a non-normative example of the decoded payload of the request parameter of a down scoped Signed Credential request.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.2-3">
 <pre>{
   "aud": "https://issuer.example.com",
   "iss": "https://wallet.example.com",
@@ -1454,9 +1486,14 @@ Content-Type: application/json
   "credential_format": "w3cvc-jwt",
   "nonce": "43747d5962a5",
   "iat": 1591069056,
-  "exp": 1591069556
+  "exp": 1591069556,
+  "claims": {
+    "nickname": null,
+    "familyName": { "essential": true }
+    "degree": { "essential": true }
+  }
 }
-</pre><a href="#section-3.1-8" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-3" class="pilcrow">¶</a>
 </div>
 </section>
 </div>

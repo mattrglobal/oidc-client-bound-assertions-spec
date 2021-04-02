@@ -236,6 +236,8 @@ The Holder may provide a signed request object containing the `sub` to be used a
 
 The Holder may also specify the `credential_format` they wish the returned credential to be formatted as. If the CI receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the `credential_format` is not specified in the request the CI SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the CI to determine this?)
 
+The Holder may optionally choose to include a `claims` property within their request to down scope the set of claims returned. If not present the CI will return the complete set of claims.
+
 When a signed request is not provided the CI will use the `sub` associated with the initial Credential request, where possible. If a `sub` value is not available the CI MUST return an error response, as per [TODO].
 
 request
@@ -267,10 +269,39 @@ Where the decoded payload of the request parameter is as follows:
     "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
     "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
   },
-  "credential_format": "w3cvc-jwt",
+  "credential_format": "w3cvc-jsonld",
   "nonce": "43747d5962a5",
   "iat": 1591069056,
   "exp": 1591069556
+}
+```
+
+## Down Scoped Credential Request
+The `claims` property may be used when requesting a Credential in order to reduce the claims returned by the CI. 
+
+The following is a non-normative example of the decoded payload of the request parameter of a down scoped Signed Credential request.
+
+```
+{
+  "aud": "https://issuer.example.com",
+  "iss": "https://wallet.example.com",
+  "sub": "urn:uuid:dc000c79-6aa3-45f2-9527-43747d5962a5",
+  "sub_jwk" : {
+    "crv":"secp256k1",
+    "kid":"YkDpvGNsch2lFBf6p8u3",
+    "kty":"EC",
+    "x":"7KEKZa5xJPh7WVqHJyUpb2MgEe3nA8Rk7eUlXsmBl-M",
+    "y":"3zIgl_ml4RhapyEm5J7lvU-4f5jiBvZr4KgxUjEhl9o"
+  },
+  "credential_format": "w3cvc-jwt",
+  "nonce": "43747d5962a5",
+  "iat": 1591069056,
+  "exp": 1591069556,
+  "claims": {
+    "nickname": null,
+    "familyName": { "essential": true }
+    "degree": { "essential": true }
+  }
 }
 ```
 
