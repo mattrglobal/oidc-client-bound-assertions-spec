@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-04-02" class="published">2 April 2021</time>
+<time datetime="2021-04-06" class="published">6 April 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1469,8 +1469,8 @@ Content-Type: application/json
         <h3 id="name-down-scoped-credential-requ">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-down-scoped-credential-requ" class="section-name selfRef">Down Scoped Credential Request</a>
         </h3>
-<p id="section-3.2-1">The <code>claims</code> property may be used when requesting a Credential in order to reduce the claims returned by the CI.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The following is a non-normative example of the decoded payload of the request parameter of a down scoped Signed Credential request.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The <code>claims</code> property, as inherited from <a href="https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter">OIDC Core Section 5.5</a>, may be used by a holder when requesting a Credential from a CI in order to control the exact claims returned by the CI in the credential. When this parameter is not present the CI MUST return all the claims that are valid for the credential the holder is making a request for.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The following is a non-normative example of the decoded payload of the request making use of the claims parameter.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-3.2-3">
 <pre>{
   "aud": "https://issuer.example.com",
