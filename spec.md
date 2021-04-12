@@ -64,13 +64,13 @@ OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. 
 
 In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as [RP tracking](https://github.com/WICG/WebID#the-rp-tracking-problem).
 
-This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs. This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).
+This specification defines how an OP can be extended to provide a set of claims to a RP of which that RP controls and may present (now acting as an OP) onward to other RP's. To facilitate this extension, this specification introduces the roles of a Credential Issuer, Credential Holder and Credential Verifier.
 
-Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).
+Additionally, the term Credential is introduced, which is defined as a set of claims about the End-User which features a cryptographic binding to the Credential Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Credential Holder to present the Credential (set of claims) to Credential Verifiers (RPs) whilst proving authority to do so.
 
-To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
+To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Credential Holder (acting as an RP) of which that Credential Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
 
-Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.
+Note that the protocol for a Credential Holder to present a Credential to a Credential Verifier is outside the scope of this specification.
 
 ## Requirements Notation and Conventions
 
@@ -85,55 +85,55 @@ All uses of JSON Web Signature (JWS) [JWS](https://tools.ietf.org/html/rfc7515) 
 This specification uses the terms defined in OpenID Connect Core 1.0; in addition, the following terms are also defined:
 
 Credential
-: A set of claims about the End-User (subject) which is cryptographically bound to the holder in an authenticatable manner based on public/private key cryptography.
+: A set of claims about the End-User (subject) which is cryptographically bound to the credential holder in an authenticatable manner based on public/private key cryptography.
 
 Credential Request
-: An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Holder) receiving a credential about the authenticated End-User.
+: An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Credential Holder) receiving a credential about the authenticated End-User.
 
-Holder
-: A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).
+Credential Holder (CH)
+: A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A Credential Holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receiving credentials from Credential Issuers).
 
 Credential Issuer (CI)
-: A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.
+: A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the Credential Holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.
 
-Subject
-: An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the holder of a credential is the subject, but in certain cases it is not. For example, a parent (the holder) might hold the credentials of a child (the subject), or a pet owner (the holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.
+Credential Subject (CS)
+: An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the Credential Holder of a credential is the subject, but in certain cases it is not. For example, a parent (the Credential Holder) might hold the credentials of a child (the subject), or a pet owner (the Credential Holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.
 
-Verifier
+Credential Verifier (CV)
 : A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials.
 
 ## Overview
 
-This specification extends the OpenID Connect protocol for the purposes of credential issuance. This specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).
+This specification extends the OpenID Connect protocol for the purposes of credential issuance. Whereby credential issuance refers to a protocol where a Credential Holder (acting as an RP) makes a request to a Credential Issuer (acting as an OP) to have a credential issued to it so that it may at a later stage then present this credential at the consent of the end user to Credential Verifiers (RPs). The steps in the credential issuance protocol are as follows:
 
-1. The Holder (acting as an RP) sends a Credential Request to the CI (acting as an OP).
-2. The CI authenticates the End-User and obtains authorization.
-3. The CI responds with a Credential.
+1. The Credential Holder (acting as an RP) sends a Credential Request to the Credential Issuer (acting as an OP).
+2. The Credential Issuer authenticates the End-User and obtains authorization.
+3. The Credential Issuer responds with a Credential.
 
 These steps are illustrated in the following diagram:
 
 ```
-+--------+                                   +----------+
-|        |                                   |          |
-|        |---(1)OpenID Credential Request--->|          |
-|        |                                   |          |
-|        |  +--------+                       |          |
-|        |  |        |                       |          |
-| Holder |  |  End-  |<--(2) AuthN & AuthZ-->|Credential|
-|  (RP)  |  |  User  |                       |  Issuer  |
-|        |  |        |                       |   (OP)   |
-|        |  +--------+                       |          |
-|        |                                   |          |
-|        |<--(3)OpenID Credential Response---|          |
-|        |                                   |          |
-+--------+                                   +----------+
++----------+                                   +----------+
+|          |                                   |          |
+|          |---(1)OpenID Credential Request--->|          |
+|          |                                   |          |
+|          |  +--------+                       |          |
+|          |  |        |                       |          |
+|Credential|  |  End-  |<--(2) AuthN & AuthZ-->|Credential|
+|  Holder  |  |  User  |                       |  Issuer  |
+|   (RP)   |  |        |                       |   (OP)   |
+|          |  +--------+                       |          |
+|          |                                   |          |
+|          |<--(3)OpenID Credential Response---|          |
+|          |                                   |          |
++----------+                                   +----------+
 ```
 
-**Note** - Outside of the scope for this specification is how the Holder then exercises presentation of this credential with a relying party, however the diagram looks like the following.
+**Note** - Outside of the scope for this specification is how the Credential Holder then exercises presentation of this credential with a Credential Verifier, however the diagram looks like the following.
 
-1. The Relying Party sends an OpenID Request to the Holder (acting an OP).
-2. The Holder authenticates the End-User and obtains authorization.
-3. The Holder responds with a Credential Presentation.
+1. The Credential Verifier (acting as a relying party) sends an OpenID Request to the Credential Holder (acting an OP).
+2. The Credential Holder authenticates the End-User and obtains authorization.
+3. The Credential Holder responds with a Credential Presentation.
 
 ```
 +----------+                                                           +----------+
@@ -142,9 +142,9 @@ These steps are illustrated in the following diagram:
 |          |                                                           |          |
 |          |                          +--------+                       |          |
 |          |                          |        |                       |          |
-| Relying  |                          |  End-  |<--(2) AuthN & AuthZ-->|  Holder  |
-|  Party   |                          |  User  |                       |   (OP)   |
-|          |                          |        |                       |          |
+|Credential|                          |  End-  |<--(2) AuthN & AuthZ-->|Credential|
+| Verifier |                          |  User  |                       |  Holder  |
+|   (RP)   |                          |        |                       |   (OP)   |
 |          |                          +--------+                       |          |
 |          |                                                           |          |
 |          |<--(3)OpenID Connect Credential Presentation Response------|          |
@@ -154,7 +154,7 @@ These steps are illustrated in the following diagram:
 
 # Credential Request
 
-A Credential Request is an OpenID Connect authentication request made by a Holder that requests the End-User to be authenticated by the Credential Issuer and consent be granted for a credential containing the requested claims about the End-User be issued to it.
+A Credential Request is an OpenID Connect authentication request made by a Credential Holder that requests the End-User to be authenticated by the Credential Issuer and consent be granted for a credential containing the requested claims about the End-User be issued to it.
 
 The following section outlines how an [OpenID Connect Authentication Request](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) is extended in order to become a valid Credential Request.
 
@@ -175,7 +175,7 @@ Location: https://server.example.com/authorize?
   &credential_format=w3cvc-jsonld
 ```
 
-When a request of this nature is made, the `access_token` issued to the Holder authorizes it to access the credential endpoint to obtain a credential from the CI.
+When a request of this nature is made, the `access_token` issued to the Credential Holder authorizes it to access the credential endpoint to obtain a credential from the Credential Issuer.
 
 ## Request Parameters
 
@@ -188,18 +188,16 @@ credential_format
 : REQUIRED. Determines the format of the credential returned at the end of the flow, values supported by the OpenID Provider are advertised in their openid-configuration metadata, under the `credential_formats_supported` attribute.
 
 sub_jwk
-: OPTIONAL. Used when making a Signed Credential Request, defines the key material the Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid [JWK](https://tools.ietf.org/html/rfc7517).
+: OPTIONAL. Used when making a Signed Credential Request, defines the key material the Credential Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid [JWK](https://tools.ietf.org/html/rfc7517).
 
 did
-: OPTIONAL. Defines the relationship between the key material the Holder is requesting the credential to be bound to and a [decentralized identifier](https://w3c.github.io/did-core/). Processing of this value requires the CI to support the resolution of [decentralized identifiers](https://w3c.github.io/did-core/) which is advertised in their openid-configuration metadata, under the `dids_supported` attribute. The value of this field MUST be a valid [decentralized identifier](https://w3c.github.io/did-core/).
+: OPTIONAL. Defines the relationship between the key material the Credential Holder is requesting the credential to be bound to and a [decentralized identifier](https://w3c.github.io/did-core/). Processing of this value requires the CI to support the resolution of [decentralized identifiers](https://w3c.github.io/did-core/) which is advertised in their openid-configuration metadata, under the `dids_supported` attribute. The value of this field MUST be a valid [decentralized identifier](https://w3c.github.io/did-core/).
 
-Public private key pairs are used by a requesting Holder to establish a means of binding to the resulting credential. A Holder making a Credential Request to a CI must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
+Public private key pairs are used by a requesting Credential Holder to establish a means of binding to the resulting credential. A Credential Holder making a Credential Request to a Credential Issuer must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a [signed request](https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject) defined in OpenID Connect Core.
 
 ## Response Types
 
 It is RECOMMENDED that a Credential Request flow use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps) as defined in OpenID Connect core.
-
-For instances where [implicit flow](https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth) is used, the `response_type` of `credential` SHOULD be used.
 
 ## Token Endpoint Response
 
@@ -207,7 +205,7 @@ Successful and Error Authentication Response are in the same manor as [OpenID Co
 
 On Request to the Token Endpoint the `grant_type` value MUST be `authorization_code` inline with the Authorization Code Flow and the `code` value included as a parameter.
 
-The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Holder to request a `credential` from the credential endpoint.
+The following is a non-normative example of a response from the token endpoint, whereby the `access_token` authorizes the Credential Holder to request a `credential` from the credential endpoint.
 
 ```
 {
@@ -220,7 +218,7 @@ The following is a non-normative example of a response from the token endpoint, 
 
 # Credential Endpoint
 
-The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Holder makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
+The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Credential Holder makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the `openid_credential` scope was granted.
 
 Communication with the Credential Endpoint MUST utilize TLS. See Section 16.17 for more information on using TLS.
 
@@ -232,14 +230,14 @@ The Credential Endpoint SHOULD support the use of Cross Origin Resource Sharing 
 
 ## Credential Endpoint Request Parameters
 
-The Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential. When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
+The Credential Holder may provide a signed request object containing the `sub` to be used as the subject for the resulting credential. When a `sub` claim is present within the request object an associated `sub_jwk` claim MUST also be present of which the request object MUST be signed with, therefore proving control over the `sub`.
 
-The Holder may also specify the `credential_format` they wish the returned credential to be formatted as. If the CI receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the `credential_format` is not specified in the request the CI SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the CI to determine this?)
+The Credential Holder may also specify the `credential_format` they wish the returned credential to be formatted as. If the Credential Issuer receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the `credential_format` is not specified in the request the Credential Issuer SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the Credential Issuer to determine this?)
 
-When a signed request is not provided the CI will use the `sub` associated with the initial Credential request, where possible. If a `sub` value is not available the CI MUST return an error response, as per [TODO].
+When a signed request is not provided the Credential Issuer will use the `sub` associated with the initial Credential request, where possible. If a `sub` value is not available the Credential Issuer MUST return an error response, as per [TODO].
 
 request
-: OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a `sub` the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that `sub`.
+: OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a `sub` the Credential Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that `sub`.
 
 A non-normative example of a Signed Credential request.
 
@@ -288,7 +286,7 @@ credential : REQUIRED. A cryptographically verifiable proof in the defined proof
 
 ## Credential
 
-Formats of the `credential` can vary, examples include JSON-LD or JWT based Credentials, the CI SHOULD make their supported credential formats available at their openid-configuration metadata endpoint.
+Formats of the `credential` can vary, examples include JSON-LD or JWT based Credentials, the Credential Issuer SHOULD make their supported credential formats available at their openid-configuration metadata endpoint.
 
 The following is a non-normative example of a Credential issued as a [W3C Verifiable Credential 1.0](https://www.w3.org/TR/vc-data-model/) compliant format in JSON-LD.
 
@@ -358,15 +356,17 @@ And the decoded Claim Set of the JWT
 
 # Usage of Decentralized Identifiers
 
+TODO improve this section
+
 [Decentralized identifiers](https://w3c.github.io/did-core/) are a resolvable identifier to a set of statements about the [did subject](https://w3c.github.io/did-core/#dfn-did-subjects) including a set of cryptographic material (e.g public keys). Using this cryptographic material, a [decentralized identifier](https://w3c.github.io/did-core/) can be used as an authenticatable identifier in a credential, rather than using a public key directly.
 
 ## Signed Credential Request using a Decentralized Identifier
 
-A Holder submitting a signed Credential Request can request, that the resulting credential be bound to the Holder through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
+A Credential Holder submitting a signed Credential Request can request, that the resulting credential be bound to the Credential Holder through the usage of [decentralized identifiers](https://w3c.github.io/did-core/) by using the `did` field.
 
-A Holder prior to submitting a credential request SHOULD validate that the CI supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
+A Credential Holder prior to submitting a credential request SHOULD validate that the CI supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of `dids_supported` has a value of `true`.
 
-The Holder SHOULD also validate that the CI supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
+The Credential Holder SHOULD also validate that the CI supports the [did method](https://w3c-ccg.github.io/did-method-registry/) to be used in the request by retrieving their openid-configuration metadata to check if an attribute of `did_methods_supported` contains the required did method.
 
 A CI processing a credential request featuring a [decentralized identifier](https://w3c.github.io/did-core/) MUST follow the following additional steps to validate the request.
 
