@@ -277,7 +277,9 @@ Where the decoded payload of the request parameter is as follows:
 ```
 
 ## Down Scoped Credential Request
-The `claims` property, as inherited from [OIDC Core Section 5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter), may be used by a holder when requesting a Credential from a CI in order to control the exact claims returned by the CI in the credential. When this parameter is not present the CI MUST return all the claims that are valid for the credential the holder is making a request for. 
+The `claims` property, as inherited from [OIDC Core Section 5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter), may be used by a Credential Holder when requesting a Credential from a CI in order to control the exact claims returned by the CI in the credential. The `claims` syntax is shared with [OIDC Core Section 5.5](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsParameter) as to how to request claims but in this case does not require the `location` abstraction (e.g id_token/user_info/credential) as all claims will be returned within the `credential`.
+
+When this parameter is not present the CI MUST return all the claims that are valid for the credential the Credential Holder is making a request for. 
 
 The following is a non-normative example of the decoded payload of the request making use of the claims parameter.
 
