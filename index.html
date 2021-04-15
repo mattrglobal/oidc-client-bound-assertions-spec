@@ -1090,7 +1090,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-04-01" class="published">1 April 2021</time>
+<time datetime="2021-04-15" class="published">15 April 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1202,10 +1202,10 @@ tr:nth-child(2n+1) > td {
       </h2>
 <p id="section-1-1">OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">In typical deployments of OpenID Connect today, in order for an OpenID Provider (OP) to be able to exercise the identity an End-User has with a Relying Party (RP), the RP must be in direct contact with the OP. This constraint causes issues such as <a href="https://github.com/WICG/WebID#the-rp-tracking-problem">RP tracking</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This specification defines how an OP can be extended to provide a set of claims to an RP of which that RP controls and may present (now acting as an OP) onward to other RPs. This specification will introduce the roles of a Credential Issuer (OP), a Holder (RP and OP) and a Verifier (RP).<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Additionally, the term Credential will be introduced, which is defined as a set of claims about the End-User which is cryptographically bound to the Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Holder (OP) to present the Credential (set of claims) to Verifiers (RPs) whilst authenticating and proving control over the Credential (set of claims).<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">Note that the protocol for a Holder to present a Credential to a Verifier is outside the scope of this specification.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-3">This specification defines how an OP can be extended to provide a set of claims to a RP of which that RP controls and may present (now acting as an OP) onward to other RP's. To facilitate this extension, this specification introduces the roles of a Credential Issuer, Credential Holder and Credential Verifier.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Additionally, the term Credential is introduced, which is defined as a set of claims about the End-User which features a cryptographic binding to the Credential Holder in an authenticatable manner based on public/private key cryptography. This feature then enables the Credential Holder to present the Credential (set of claims) to Credential Verifiers (RPs) whilst proving authority to do so.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">To reiterate, this specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Credential Holder (acting as an RP) of which that Credential Holder (acting as an OP) controls and may present onward to Verifiers (RPs).<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">Note that the protocol for a Credential Holder to present a Credential to a Credential Verifier is outside the scope of this specification.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
 <section id="section-1.1">
         <h3 id="name-requirements-notation-and-c">
@@ -1225,25 +1225,25 @@ tr:nth-child(2n+1) > td {
 <dl class="dlParallel" id="section-1.2-2">
           <dt id="section-1.2-2.1">Credential</dt>
 <dd id="section-1.2-2.2">
-            <p id="section-1.2-2.2.1">A set of claims about the End-User (subject) which is cryptographically bound to the holder in an authenticatable manner based on public/private key cryptography.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.2.1">A set of claims about the End-User (subject) which is cryptographically bound to the credential holder in an authenticatable manner based on public/private key cryptography.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-1.2-2.3">Credential Request</dt>
 <dd id="section-1.2-2.4">
-            <p id="section-1.2-2.4.1">An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Holder) receiving a credential about the authenticated End-User.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.4.1">An OpenID Connect Authentication Request that results in the End-User being authenticated by the Authorization Server and the Client (Credential Holder) receiving a credential about the authenticated End-User.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-1.2-2.5">Holder</dt>
+<dt id="section-1.2-2.5">Credential Holder (CH)</dt>
 <dd id="section-1.2-2.6">
-            <p id="section-1.2-2.6.1">A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receieving credetials from Credential Issuers).<a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.6.1">A role an entity performs by holding credentials and presenting them to RPs on behalf of the consenting End-User (subject of the credentials). A Credential Holder serves the role of an OP (when presenting credentials to RPs) and an RP (when receiving credentials from Credential Issuers).<a href="#section-1.2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-1.2-2.7">Credential Issuer (CI)</dt>
 <dd id="section-1.2-2.8">
-            <p id="section-1.2-2.8.1">A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.<a href="#section-1.2-2.8.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.8.1">A role an entity performs by asserting claims about one or more subjects, creating a credential from these claims (cryptographically binding them to the holder), and transmitting the credential to the Credential Holder. A Credential Issuer is an OP that has been extended in order to also issue credentials.<a href="#section-1.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-1.2-2.9">Subject</dt>
+<dt id="section-1.2-2.9">Credential Subject (CS)</dt>
 <dd id="section-1.2-2.10">
-            <p id="section-1.2-2.10.1">An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the holder of a credential is the subject, but in certain cases it is not. For example, a parent (the holder) might hold the credentials of a child (the subject), or a pet owner (the holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.<a href="#section-1.2-2.10.1" class="pilcrow">¶</a></p>
+            <p id="section-1.2-2.10.1">An entity about which claims are made. Example subjects include human beings, animals, and things. In many cases the Credential Holder of a credential is the subject, but in certain cases it is not. For example, a parent (the Credential Holder) might hold the credentials of a child (the subject), or a pet owner (the Credential Holder) might hold the credentials of their pet (the subject). Most commonly the subject will be the End-User.<a href="#section-1.2-2.10.1" class="pilcrow">¶</a></p>
 </dd>
-<dt id="section-1.2-2.11">Verifier</dt>
+<dt id="section-1.2-2.11">Credential Verifier (CV)</dt>
 <dd id="section-1.2-2.12">
             <p id="section-1.2-2.12.1">A role an entity performs by receiving one or more credentials for processing. A verifier is an RP that has been extended to receive and process credentials.<a href="#section-1.2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1255,46 +1255,46 @@ tr:nth-child(2n+1) > td {
         <h3 id="name-overview">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
-<p id="section-1.3-1">This specification extends the OpenID Connect protocol for the purposes of credential issuance. This specification defines a protocol where a Credential Issuer (OP) may provide a Credential (set of claims) to a Holder (acting as an RP) of which that Holder (acting as an OP) controls and may present onward to Verifiers (RPs).<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1">This specification extends the OpenID Connect protocol for the purposes of credential issuance. Whereby credential issuance refers to a protocol where a Credential Holder (acting as an RP) makes a request to a Credential Issuer (acting as an OP) to have a credential issued to it so that it may at a later stage then present this credential at the consent of the end user to Credential Verifiers (RPs). The steps in the credential issuance protocol are as follows:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.3-2">
           <li id="section-1.3-2.1">
-            <p id="section-1.3-2.1.1">The Holder (acting as an RP) sends a Credential Request to the CI (acting as an OP).<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.1.1">The Credential Holder (acting as an RP) sends a Credential Request to the Credential Issuer (acting as an OP).<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-1.3-2.2">
-            <p id="section-1.3-2.2.1">The CI authenticates the End-User and obtains authorization.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.2.1">The Credential Issuer authenticates the End-User and obtains authorization.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-1.3-2.3">
-            <p id="section-1.3-2.3.1">The CI responds with a Credential.<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.3.1">The Credential Issuer responds with a Credential.<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
 </ol>
 <p id="section-1.3-3">These steps are illustrated in the following diagram:<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-1.3-4">
-<pre>+--------+                                   +----------+
-|        |                                   |          |
-|        |---(1)OpenID Credential Request---&gt;|          |
-|        |                                   |          |
-|        |  +--------+                       |          |
-|        |  |        |                       |          |
-| Holder |  |  End-  |&lt;--(2) AuthN &amp; AuthZ--&gt;|Credential|
-|  (RP)  |  |  User  |                       |  Issuer  |
-|        |  |        |                       |   (OP)   |
-|        |  +--------+                       |          |
-|        |                                   |          |
-|        |&lt;--(3)OpenID Credential Response---|          |
-|        |                                   |          |
-+--------+                                   +----------+
+<pre>+----------+                                   +----------+
+|          |                                   |          |
+|          |---(1)OpenID Credential Request---&gt;|          |
+|          |                                   |          |
+|          |  +--------+                       |          |
+|          |  |        |                       |          |
+|Credential|  |  End-  |&lt;--(2) AuthN &amp; AuthZ--&gt;|Credential|
+|  Holder  |  |  User  |                       |  Issuer  |
+|   (RP)   |  |        |                       |   (OP)   |
+|          |  +--------+                       |          |
+|          |                                   |          |
+|          |&lt;--(3)OpenID Credential Response---|          |
+|          |                                   |          |
++----------+                                   +----------+
 </pre><a href="#section-1.3-4" class="pilcrow">¶</a>
 </div>
-<p id="section-1.3-5"><strong>Note</strong> - Outside of the scope for this specification is how the Holder then exercises presentation of this credential with a relying party, however the diagram looks like the following.<a href="#section-1.3-5" class="pilcrow">¶</a></p>
+<p id="section-1.3-5"><strong>Note</strong> - Outside of the scope for this specification is how the Credential Holder then exercises presentation of this credential with a Credential Verifier, however the diagram looks like the following.<a href="#section-1.3-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.3-6">
           <li id="section-1.3-6.1">
-            <p id="section-1.3-6.1.1">The Relying Party sends an OpenID Request to the Holder (acting an OP).<a href="#section-1.3-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-6.1.1">The Credential Verifier (acting as a relying party) sends an OpenID Request to the Credential Holder (acting an OP).<a href="#section-1.3-6.1.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-1.3-6.2">
-            <p id="section-1.3-6.2.1">The Holder authenticates the End-User and obtains authorization.<a href="#section-1.3-6.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-6.2.1">The Credential Holder authenticates the End-User and obtains authorization.<a href="#section-1.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
 <li id="section-1.3-6.3">
-            <p id="section-1.3-6.3.1">The Holder responds with a Credential Presentation.<a href="#section-1.3-6.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-6.3.1">The Credential Holder responds with a Credential Presentation.<a href="#section-1.3-6.3.1" class="pilcrow">¶</a></p>
 </li>
 </ol>
 <div class="artwork art-text alignLeft" id="section-1.3-7">
@@ -1304,9 +1304,9 @@ tr:nth-child(2n+1) > td {
 |          |                                                           |          |
 |          |                          +--------+                       |          |
 |          |                          |        |                       |          |
-| Relying  |                          |  End-  |&lt;--(2) AuthN &amp; AuthZ--&gt;|  Holder  |
-|  Party   |                          |  User  |                       |   (OP)   |
-|          |                          |        |                       |          |
+|Credential|                          |  End-  |&lt;--(2) AuthN &amp; AuthZ--&gt;|Credential|
+| Verifier |                          |  User  |                       |  Holder  |
+|   (RP)   |                          |        |                       |   (OP)   |
 |          |                          +--------+                       |          |
 |          |                                                           |          |
 |          |&lt;--(3)OpenID Connect Credential Presentation Response------|          |
@@ -1323,7 +1323,7 @@ tr:nth-child(2n+1) > td {
       <h2 id="name-credential-request">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-credential-request" class="section-name selfRef">Credential Request</a>
       </h2>
-<p id="section-2-1">A Credential Request is an OpenID Connect authentication request made by a Holder that requests the End-User to be authenticated by the Credential Issuer and consent be granted for a credential containing the requested claims about the End-User be issued to it.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">A Credential Request is an OpenID Connect authentication request made by a Credential Holder that requests the End-User to be authenticated by the Credential Issuer and consent be granted for a credential containing the requested claims about the End-User be issued to it.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">The following section outlines how an <a href="https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest">OpenID Connect Authentication Request</a> is extended in order to become a valid Credential Request.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <div id="credential-request-1">
 <section id="section-2.1">
@@ -1343,7 +1343,7 @@ Location: https://server.example.com/authorize?
   &amp;credential_format=w3cvc-jsonld
 </pre><a href="#section-2.1-3" class="pilcrow">¶</a>
 </div>
-<p id="section-2.1-4">When a request of this nature is made, the <code>access_token</code> issued to the Holder authorizes it to access the credential endpoint to obtain a credential from the CI.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">When a request of this nature is made, the <code>access_token</code> issued to the Credential Holder authorizes it to access the credential endpoint to obtain a credential from the Credential Issuer.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="request-parameters">
@@ -1363,14 +1363,14 @@ Location: https://server.example.com/authorize?
 </dd>
 <dt id="section-2.2-2.5">sub_jwk</dt>
 <dd id="section-2.2-2.6">
-            <p id="section-2.2-2.6.1">OPTIONAL. Used when making a Signed Credential Request, defines the key material the Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid <a href="https://tools.ietf.org/html/rfc7517">JWK</a>.<a href="#section-2.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-2.6.1">OPTIONAL. Used when making a Signed Credential Request, defines the key material the Credential Holder is requesting the credential to be bound to and the key responsible for signing the request object. The value is a JSON Object that is a valid <a href="https://tools.ietf.org/html/rfc7517">JWK</a>.<a href="#section-2.2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
 <dt id="section-2.2-2.7">did</dt>
 <dd id="section-2.2-2.8">
-            <p id="section-2.2-2.8.1">OPTIONAL. Defines the relationship between the key material the Holder is requesting the credential to be bound to and a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>. Processing of this value requires the CI to support the resolution of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> which is advertised in their openid-configuration metadata, under the <code>dids_supported</code> attribute. The value of this field MUST be a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.2-2.8.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-2.8.1">OPTIONAL. Defines the relationship between the key material the Credential Holder is requesting the credential to be bound to and a <a href="https://w3c.github.io/did-core/">decentralized identifier</a>. Processing of this value requires the CI to support the resolution of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> which is advertised in their openid-configuration metadata, under the <code>dids_supported</code> attribute. The value of this field MUST be a valid <a href="https://w3c.github.io/did-core/">decentralized identifier</a>.<a href="#section-2.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
 </dl>
-<p id="section-2.2-3">Public private key pairs are used by a requesting Holder to establish a means of binding to the resulting credential. A Holder making a Credential Request to a CI must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a <a href="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request</a> defined in OpenID Connect Core.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-3">Public private key pairs are used by a requesting Credential Holder to establish a means of binding to the resulting credential. A Credential Holder making a Credential Request to a Credential Issuer must prove control over this binding mechanism during the request, this is accomplished through the extended usage of a <a href="https://openid.net/specs/openid-connect-core-1_0.html#SignedRequestObject">signed request</a> defined in OpenID Connect Core.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="response-types">
@@ -1379,7 +1379,6 @@ Location: https://server.example.com/authorize?
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-response-types" class="section-name selfRef">Response Types</a>
         </h3>
 <p id="section-2.3-1">It is RECOMMENDED that a Credential Request flow use the <a href="https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowSteps">authorization code flow</a> as defined in OpenID Connect core.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.3-2">For instances where <a href="https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth">implicit flow</a> is used, the <code>response_type</code> of <code>credential</code> SHOULD be used.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-endpoint-response">
@@ -1389,7 +1388,7 @@ Location: https://server.example.com/authorize?
         </h3>
 <p id="section-2.4-1">Successful and Error Authentication Response are in the same manor as <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a> with the <code>code</code> parameter always being returned with the Authorization Code Flow.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">On Request to the Token Endpoint the <code>grant_type</code> value MUST be <code>authorization_code</code> inline with the Authorization Code Flow and the <code>code</code> value included as a parameter.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.4-3">The following is a non-normative example of a response from the token endpoint, whereby the <code>access_token</code> authorizes the Holder to request a <code>credential</code> from the credential endpoint.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">The following is a non-normative example of a response from the token endpoint, whereby the <code>access_token</code> authorizes the Credential Holder to request a <code>credential</code> from the credential endpoint.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-2.4-4">
 <pre>{
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
@@ -1408,7 +1407,7 @@ Location: https://server.example.com/authorize?
       <h2 id="name-credential-endpoint">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-credential-endpoint" class="section-name selfRef">Credential Endpoint</a>
       </h2>
-<p id="section-3-1">The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Holder makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the <code>openid_credential</code> scope was granted.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">The Credential Endpoint is an OAuth 2.0 Protected Resource that when called, returns Claims about the authenticated End-User in the form of a credential. To obtain a credential on behalf of the End-User, the Credential Holder makes a request to the Credential Endpoint using an Access Token obtained through OpenID Connect Authentication whereby the the <code>openid_credential</code> scope was granted.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Communication with the Credential Endpoint MUST utilize TLS. See Section 16.17 for more information on using TLS.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">The Credential Endpoint MUST support the use of HTTP POST methods defined in RFC 2616 [RFC2616].<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">It is recommended that the Credential Endpoint SHOULD enforce presentation of the OAuth2.0 Access Token to be sender constrained <a href="https://tools.ietf.org/html/draft-fett-oauth-dpop-04">DPOP</a>. However the Credential Endpoint MAY also accept Access Tokens as OAuth 2.0 Bearer Token Usage [RFC6750].<a href="#section-3-4" class="pilcrow">¶</a></p>
@@ -1418,13 +1417,13 @@ Location: https://server.example.com/authorize?
         <h3 id="name-credential-endpoint-request">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-credential-endpoint-request" class="section-name selfRef">Credential Endpoint Request Parameters</a>
         </h3>
-<p id="section-3.1-1">The Holder may provide a signed request object containing the <code>sub</code> to be used as the subject for the resulting credential. When a <code>sub</code> claim is present within the request object an associated <code>sub_jwk</code> claim MUST also be present of which the request object MUST be signed with, therefore proving control over the <code>sub</code>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">The Holder may also specify the <code>credential_format</code> they wish the returned credential to be formatted as. If the CI receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the <code>credential_format</code> is not specified in the request the CI SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the CI to determine this?)<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">When a signed request is not provided the CI will use the <code>sub</code> associated with the initial Credential request, where possible. If a <code>sub</code> value is not available the CI MUST return an error response, as per [TODO].<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">The Credential Holder may provide a signed request object containing the <code>sub</code> to be used as the subject for the resulting credential. When a <code>sub</code> claim is present within the request object an associated <code>sub_jwk</code> claim MUST also be present of which the request object MUST be signed with, therefore proving control over the <code>sub</code>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The Credential Holder may also specify the <code>credential_format</code> they wish the returned credential to be formatted as. If the Credential Issuer receiving the request does not support the requested credential format they it MUST return an error response, as per [TODO]. If the <code>credential_format</code> is not specified in the request the Credential Issuer SHOULD respond with their preferred or default format. (Note if we are going to have a default we need to specify it or is it at the discretion of the Credential Issuer to determine this?)<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">When a signed request is not provided the Credential Issuer will use the <code>sub</code> associated with the initial Credential request, where possible. If a <code>sub</code> value is not available the Credential Issuer MUST return an error response, as per [TODO].<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <dl class="dlParallel" id="section-3.1-4">
           <dt id="section-3.1-4.1">request</dt>
 <dd id="section-3.1-4.2">
-            <p id="section-3.1-4.2.1">OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a <code>sub</code> the Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that <code>sub</code>.<a href="#section-3.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-3.1-4.2.1">OPTIONAL. A valid OIDC signed JWT request object. The request object is used to provide a <code>sub</code> the Credential Holder wishes to be used as the subject of the resulting credential as well as provide proof of control of that <code>sub</code>.<a href="#section-3.1-4.2.1" class="pilcrow">¶</a></p>
 </dd>
 </dl>
 <p id="section-3.1-5">A non-normative example of a Signed Credential request.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
@@ -1481,7 +1480,7 @@ credential : REQUIRED. A cryptographically verifiable proof in the defined proof
         <h3 id="name-credential">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-credential" class="section-name selfRef">Credential</a>
         </h3>
-<p id="section-4.1-1">Formats of the <code>credential</code> can vary, examples include JSON-LD or JWT based Credentials, the CI SHOULD make their supported credential formats available at their openid-configuration metadata endpoint.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">Formats of the <code>credential</code> can vary, examples include JSON-LD or JWT based Credentials, the Credential Issuer SHOULD make their supported credential formats available at their openid-configuration metadata endpoint.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1-2">The following is a non-normative example of a Credential issued as a <a href="https://www.w3.org/TR/vc-data-model/">W3C Verifiable Credential 1.0</a> compliant format in JSON-LD.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-4.1-3">
 <pre>{
@@ -1554,15 +1553,16 @@ credential : REQUIRED. A cryptographically verifiable proof in the defined proof
       <h2 id="name-usage-of-decentralized-iden">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-usage-of-decentralized-iden" class="section-name selfRef">Usage of Decentralized Identifiers</a>
       </h2>
-<p id="section-5-1"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the <a href="https://w3c.github.io/did-core/#dfn-did-subjects">did subject</a> including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential, rather than using a public key directly.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">TODO improve this section<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2"><a href="https://w3c.github.io/did-core/">Decentralized identifiers</a> are a resolvable identifier to a set of statements about the <a href="https://w3c.github.io/did-core/#dfn-did-subjects">did subject</a> including a set of cryptographic material (e.g public keys). Using this cryptographic material, a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> can be used as an authenticatable identifier in a credential, rather than using a public key directly.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="signed-credential-request-using-a-decentralized-identifier">
 <section id="section-5.1">
         <h3 id="name-signed-credential-request-u">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-signed-credential-request-u" class="section-name selfRef">Signed Credential Request using a Decentralized Identifier</a>
         </h3>
-<p id="section-5.1-1">A Holder submitting a signed Credential Request can request, that the resulting credential be bound to the Holder through the usage of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> by using the <code>did</code> field.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">A Holder prior to submitting a credential request SHOULD validate that the CI supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of <code>dids_supported</code> has a value of <code>true</code>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">The Holder SHOULD also validate that the CI supports the <a href="https://w3c-ccg.github.io/did-method-registry/">did method</a> to be used in the request by retrieving their openid-configuration metadata to check if an attribute of <code>did_methods_supported</code> contains the required did method.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">A Credential Holder submitting a signed Credential Request can request, that the resulting credential be bound to the Credential Holder through the usage of <a href="https://w3c.github.io/did-core/">decentralized identifiers</a> by using the <code>did</code> field.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">A Credential Holder prior to submitting a credential request SHOULD validate that the CI supports the resolution of decentralized identifiers by retrieving their openid-configuration metadata to check if an attribute of <code>dids_supported</code> has a value of <code>true</code>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The Credential Holder SHOULD also validate that the CI supports the <a href="https://w3c-ccg.github.io/did-method-registry/">did method</a> to be used in the request by retrieving their openid-configuration metadata to check if an attribute of <code>did_methods_supported</code> contains the required did method.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">A CI processing a credential request featuring a <a href="https://w3c.github.io/did-core/">decentralized identifier</a> MUST follow the following additional steps to validate the request.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-5">
           <li id="section-5.1-5.1">
@@ -1591,42 +1591,35 @@ credential : REQUIRED. A cryptographically verifiable proof in the defined proof
   "did": "did:example:1234",
   "redirect_uri": "https://Client.example.com/callback",
   "credential_format": "w3cvc-jsonld"
-
 }
 </pre><a href="#section-5.1-8" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1-9">The following is a non-normative example of a token endpoint response for the request shown above.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.1-9">The following is a non-normative example of a credential endpoint response for the request shown above.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
 <div class="artwork art-text alignLeft" id="section-5.1-10">
 <pre>{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-  "token_type": "bearer",
-  "expires_in": 86400,
-  "id_token": "eyJodHRwOi8vbWF0dHIvdGVuYW50L..3Mz",
+  "format": "w3cvc-jsonld",
   "credential": {
-    "format": "w3cvc-jsonld",
-    "data": {
-      "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://www.w3.org/2018/credentials/examples/v1"
-      ],
-      "id": "http://example.gov/credentials/3732",
-      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-      "issuer": "https://issuer.edu",
-      "issuanceDate": "2020-03-10T04:24:12.164Z",
-      "credentialSubject": {
-        "id": "did:example:1234",
-        "degree": {
-          "type": "BachelorDegree",
-          "name": "Bachelor of Science and Arts"
-        }
-      },
-      "proof": {
-        "type": "Ed25519Signature2018",
-        "created": "2020-04-10T21:35:35Z",
-        "verificationMethod": "https://issuer.edu/keys/1",
-        "proofPurpose": "assertionMethod",
-        "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://www.w3.org/2018/credentials/examples/v1"
+    ],
+    "id": "http://example.gov/credentials/3732",
+    "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+    "issuer": "https://issuer.edu",
+    "issuanceDate": "2020-03-10T04:24:12.164Z",
+    "credentialSubject": {
+      "id": "did:example:1234",
+      "degree": {
+        "type": "BachelorDegree",
+        "name": "Bachelor of Science and Arts"
       }
+    },
+    "proof": {
+      "type": "Ed25519Signature2018",
+      "created": "2020-04-10T21:35:35Z",
+      "verificationMethod": "https://issuer.edu/keys/1",
+      "proofPurpose": "assertionMethod",
+      "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..l9d0YHjcFAH2H4dB9xlWFZQLUpixVCWJk0eOt4CXQe1NXKWZwmhmn9OQp6YxX0a2LffegtYESTCJEoGVXLqWAA"
     }
   }
 }
