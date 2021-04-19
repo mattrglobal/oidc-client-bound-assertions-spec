@@ -9,11 +9,13 @@
 <meta content="John Thompson" name="author">
 <meta content="Adam Lemmon" name="author">
 <meta content="Kim Cameron" name="author">
-<meta content="
+<meta content='
        OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User. 
-       In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as  relying party tracking . 
+       OpenID Providers today within OpenID Connect assume many roles, one of these is providing End-User claims to the relying party at the consent of the End-User such as their name or date of birth, providers performing this function are often referred to as being claims providers. However, the need for End-Users to be able to provide a variety of claims to a relying party from different providers is only increasing as many business processes that span multiple logical domains such as KYC and education move towards digital channels. 
+       However, assuming a direct integration between the relying party and the claims providers leads to a difficult experience for End-Users to manage. Instead End-Users need a way to consolidate the different identities and claims they have available with various claims providers into one place where they can manage their release from. In doing this, a layer of in-direction is created between the relying party and the claims provider through the introduction of a new party that we refer to in this specification as being the "holder". 
+       In OpenID Connect today the existing ways to communicate End-User claims to relying parties are the id_token and the userinfo endpoint, however these mechanisms alone are unsuitable for the style of indirect presentation of claims to relying parties via a holder, as the relying party must be able to authenticate the authority of the holder to be presenting the claims on behalf of the End-User. Instead in order to support this style of flow, this specification defines a new vehicle for communicating End-User claims called a "credential". In addition to this definition this specification defines how an existing OpenID Provider can be extended to issue "credentials" to holders. 
        This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials. 
-    " name="description">
+    ' name="description">
 <meta content="xml2rfc 2.40.1" name="generator">
 <meta content="openid-credential-provider-01" name="ietf.draft">
 <link href="./openid-credential-provider-01.xml" rel="alternate" type="application/rfc+xml">
@@ -1090,7 +1092,7 @@ tr:nth-child(2n+1) > td {
 <dd class="individual-draft">openid-credential-provider-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-04-15" class="published">15 April 2021</time>
+<time datetime="2021-04-19" class="published">19 April 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
@@ -1119,8 +1121,10 @@ tr:nth-child(2n+1) > td {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">In typical deployments of OpenID Connect today to be able to exercise the identity an End-User has with an OpenID Provider with a relying party, the relying party must be in direct contact with the provider. This constraint causes issues such as <a href="https://github.com/WICG/WebID#the-rp-tracking-problem">relying party tracking</a>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">OpenID Providers today within OpenID Connect assume many roles, one of these is providing End-User claims to the relying party at the consent of the End-User such as their name or date of birth, providers performing this function are often referred to as being claims providers. However, the need for End-Users to be able to provide a variety of claims to a relying party from different providers is only increasing as many business processes that span multiple logical domains such as KYC and education move towards digital channels.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">However, assuming a direct integration between the relying party and the claims providers leads to a difficult experience for End-Users to manage. Instead End-Users need a way to consolidate the different identities and claims they have available with various claims providers into one place where they can manage their release from. In doing this, a layer of in-direction is created between the relying party and the claims provider through the introduction of a new party that we refer to in this specification as being the "holder".<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-4">In OpenID Connect today the existing ways to communicate End-User claims to relying parties are the id_token and the userinfo endpoint, however these mechanisms alone are unsuitable for the style of indirect presentation of claims to relying parties via a holder, as the relying party must be able to authenticate the authority of the holder to be presenting the claims on behalf of the End-User. Instead in order to support this style of flow, this specification defines a new vehicle for communicating End-User claims called a "credential". In addition to this definition this specification defines how an existing OpenID Provider can be extended to issue "credentials" to holders.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
+<p id="section-abstract-5">This specification defines how an OpenID provider can be extended beyond being the provider of simple identity assertions into being the provider of credentials.<a href="#section-abstract-5" class="pilcrow">¶</a></p>
 </section>
 <div id="toc">
 <section id="section-toc.1">
