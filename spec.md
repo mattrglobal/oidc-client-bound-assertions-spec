@@ -50,13 +50,7 @@ email = "kim@Convergence.tech"
 
 .# Abstract
 
-OpenID Connect 1.0 is a simple identity layer on top of the OAuth 2.0 protocol. It enables relying parties to verify the identity of the End-User based on the authentication performed by an Authorization Server, as well as to obtain basic profile information about the End-User.
-
-OpenID Providers today within OpenID Connect assume many roles, one of these is providing End-User claims to the relying party at the consent of the End-User such as their name or date of birth, providers performing this function are often referred to as being claims providers. However, the need for End-Users to be able to provide a variety of claims to a relying party from different providers is only increasing as many business processes that span multiple logical domains such as KYC and education move towards digital channels.
-
-However, assuming a direct integration between the relying party and the claims providers leads to a difficult experience for End-Users to manage. Instead, End-Users need a way to consolidate the different identities and claims they have available with various claims providers into one place where they can manage their release from. In doing this, a layer of in-direction is created between the relying party and the claims provider through the introduction of a new party that we refer to in this specification as being the "holder".
-
-In OpenID Connect today the existing ways to communicate End-User claims to relying parties are the `id_token` and the `userinfo` endpoint, however, these mechanisms alone are unsuitable for the style of indirect presentation of claims to relying parties via a holder, as the relying party must be able to authenticate the authority of the holder to be presenting the claims on behalf of the End-User. Instead, to support this style of flow, this specification defines a new vehicle for communicating End-User claims called a "credential". Additionally, this specification defines how an existing OpenID Provider can be extended to issue "credentials" to holders.
+This specification provides a way for End-Users to consolidate sets of claims that are cryptographically bound to them ("Credentials") into one place from which they can manage their release to a relying party. To accomplish this flow, this specification introduces a protocol (and Credential-aware role extensions) through which a Credential Issuer (OP) may provide a Credential to a Credential Holder (acting as an RP), who (acting as an OP) may then present onward to Verifiers (RPs).
 
 {mainmatter}
 
